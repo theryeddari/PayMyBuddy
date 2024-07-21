@@ -3,7 +3,6 @@ package com.thery.paymybuddy.Services;
 import com.thery.paymybuddy.configs.security.JwtClientServiceConfig;
 import com.thery.paymybuddy.dto.*;
 import com.thery.paymybuddy.models.Client;
-import com.thery.paymybuddy.repository.ClientRepository;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,8 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 import static com.thery.paymybuddy.Exceptions.AuthenticationManagementServiceException.*;
 import static com.thery.paymybuddy.constants.MessagesServicesConstants.*;
@@ -31,20 +28,20 @@ public class AuthenticationManagementService {
 
     private final PasswordEncoder clientPasswordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final ClientRepository clientRepository;
+    private final ClientService clientService;
     private final JwtClientServiceConfig jwtClientServiceConfig;
 
     /**
      * Constructs an instance of AuthenticationManagementService.
      *
-     * @param clientRepository               Repository for accessing client data.
+     * @param clientService               Repository for accessing client data.
      * @param clientPasswordEncoder         Encoder for client passwords.
      * @param authenticationConfiguration   Authentication configuration manager.
      * @param jwtClientServiceConfig                     Service for handling JWT operations.
      * @throws Exception                     Throws exception if initialization fails.
      */
-    public AuthenticationManagementService(ClientRepository clientRepository, @Qualifier("clientPasswordEncoder") PasswordEncoder clientPasswordEncoder, AuthenticationConfiguration authenticationConfiguration, JwtClientServiceConfig jwtClientServiceConfig) throws Exception {
-        this.clientRepository = clientRepository;
+    public AuthenticationManagementService(ClientService clientService, @Qualifier("clientPasswordEncoder") PasswordEncoder clientPasswordEncoder, AuthenticationConfiguration authenticationConfiguration, JwtClientServiceConfig jwtClientServiceConfig) throws Exception {
+        this.clientService = clientService;
         this.clientPasswordEncoder = clientPasswordEncoder;
         this.authenticationManager = authenticationConfiguration.getAuthenticationManager();
         this.jwtClientServiceConfig = jwtClientServiceConfig;
@@ -60,7 +57,7 @@ public class AuthenticationManagementService {
     @Transactional
     public SignUpResponse signUpClient(SignUpRequest newClient) throws SignUpClientException {
         try {
-            if (clientRepository.findByEmail(newClient.getEmail()) != null) {
+            if (clientService.isExistClient(newClient.getEmail())) {
                 throw new ClientAlreadyExistException();
             }
 
@@ -71,11 +68,11 @@ public class AuthenticationManagementService {
             client.setRole("CLIENT");
             client.setSaving(0);
 
-            Client clientSaved = clientRepository.save(client);
+            Client clientSaved = clientService.saveClient(client);
 
             logger.info("Client signed up successfully: {}", clientSaved.getUsername());
 
-            return new SignUpResponse(clientSaved.getUsername(), clientSaved.getEmail());
+            return new SignUpResponse(SIGN_UP_SUCCESS);
 
         } catch (Exception e) {
             logger.error("Error during client sign up", e);
@@ -93,12 +90,8 @@ public class AuthenticationManagementService {
     @Transactional
     public SignInResponseDTO  signInClient(SignInRequest SignInRequest) throws SignInClientException {
         try {
-            Optional<Client> client = Optional.ofNullable(clientRepository.findByEmail(SignInRequest.getEmail()));
-            if (client.isEmpty()) {
-                logger.error("Client had not found {}", signInDTO.getEmail());
-                throw new ClientNotFoundException(signInDTO.getEmail());
-            }
-            Long clientId = client.get().getId();
+            Client client = clientService.findByEmail(SignInRequest.getEmail());
+            Long clientId = client.getId();
             UsernamePasswordAuthenticationToken credential = new UsernamePasswordAuthenticationToken(clientId, SignInRequest.getPassword());
             Authentication authentication = authenticationManager.authenticate(credential);
             SecurityContextHolder.getContext().setAuthentication(authentication);

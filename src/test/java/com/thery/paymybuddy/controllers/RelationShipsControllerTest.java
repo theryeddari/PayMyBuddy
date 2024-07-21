@@ -29,7 +29,7 @@ public class RelationShipsControllerTest {
     @Test
     void addRelationShips_success() throws Exception {
         AddRelationShipsRequest addRelationShipsRequest = new AddRelationShipsRequest("friend@gmail.com");
-        AddRelationShipsResponse addRelationShipsSuccessDTO = new AddRelationShipsResponse("friend@gmail.com","Friend");
+        AddRelationShipsResponse addRelationShipsSuccessDTO = new AddRelationShipsResponse("The addition of your relationship was completed correctly");
 
         when(relationShipsService.addRelationShips(addRelationShipsRequest)).thenReturn(addRelationShipsSuccessDTO);
 

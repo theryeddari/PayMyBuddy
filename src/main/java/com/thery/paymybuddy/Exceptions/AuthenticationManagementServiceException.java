@@ -1,7 +1,5 @@
 package com.thery.paymybuddy.Exceptions;
 
-import com.thery.paymybuddy.constants.MessageExceptionConstants;
-
 import static com.thery.paymybuddy.constants.MessageExceptionConstants.*;
 
 /**
@@ -97,20 +95,6 @@ public class AuthenticationManagementServiceException extends Exception {
          */
         public GetIdClientFromContextException(Exception cause) {
             super(GET_ID_CLIENT_FROM_CONTEXT_EXCEPTION + MORE_INFO + cause.getClass() + " " + cause.getMessage(), cause);
-        }
-    }
-
-    /**
-     * Exception class for client not found operation errors.
-     */
-    public static class ClientNotFoundException extends AuthenticationManagementServiceException {
-        /**
-         * Constructs a ClientNotFoundException with the cause of the exception.
-         *
-         * @param email The cause of the exception
-         */
-        public ClientNotFoundException(String email) {
-            super(MessageExceptionConstants.CLIENT_NOT_FOUND_EXCEPTION + email);
         }
     }
 }

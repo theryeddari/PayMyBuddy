@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.Objects;
 
+import static com.thery.paymybuddy.constants.MessagesServicesConstants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -33,28 +34,28 @@ public  class AuthenticationManagementControllerTest {
 
     @Test
     void signUpClient_success() throws Exception {
-        SignUpRequest SignUpRequest = new SignUpRequest("Alice","alice@gmail.com","alicep");
-        SignUpResponse SignUpResponse = new SignUpResponse("Alice","alice@gmail.com");
+        SignUpRequest signUpRequest = new SignUpRequest("Alice","alice@gmail.com","alicep");
+        SignUpResponse signUpResponse = new SignUpResponse(SIGN_UP_SUCCESS);
 
-        when(authenticationManagementService.signUpClient(any(SignUpRequest.class))).thenReturn(SignUpResponse);
+        when(authenticationManagementService.signUpClient(any(SignUpRequest.class))).thenReturn(signUpResponse);
 
-        SignUpResponse result = authenticationManagementController.signUpClient(SignUpRequest);
+        SignUpResponse result = authenticationManagementController.signUpClient(signUpRequest);
 
-        assertEquals(SignUpResponse, result);
+        assertEquals(signUpResponse, result);
         verify(authenticationManagementService).signUpClient(any(SignUpRequest.class));
     }
 
     @Test
     void signInClient_success() throws Exception {
-        SignInRequest SignInRequest = new SignInRequest("alice@gmail.com","alicep");
-        SignInResponse SignInResponse = new SignInResponse("Welcome new Buddy");
-        SignInResponseDTO signInResponseDTO = new SignInResponseDTO("jwt-token", SignInResponse);
+        SignInRequest signInRequest = new SignInRequest("alice@gmail.com","alicep");
+        SignInResponse signInResponse = new SignInResponse("Welcome new Buddy");
+        SignInResponseDTO signInResponseDTO = new SignInResponseDTO("jwt-token", signInResponse);
 
         when(authenticationManagementService.signInClient(any(SignInRequest.class))).thenReturn(signInResponseDTO);
 
-        ResponseEntity<SignInResponse> result = authenticationManagementController.signInClient(SignInRequest);
+        ResponseEntity<SignInResponse> result = authenticationManagementController.signInClient(signInRequest);
 
-        assertEquals(SignInResponse, result.getBody());
+        assertEquals(signInResponse, result.getBody());
         assertEquals(List.of("Bearer jwt-token"), result.getHeaders().get("Authorization"));
         assertEquals("Welcome new Buddy", Objects.requireNonNull(result.getBody()).getWelcomingMessage());
 
@@ -63,12 +64,12 @@ public  class AuthenticationManagementControllerTest {
 
     @Test
     void logOutClient_success() throws Exception {
-        LogOutResponse LogOutResponse = new LogOutResponse("See you later Alice");
-        when(authenticationManagementService.logOutClient()).thenReturn(LogOutResponse);
+        LogOutResponse logOutResponse = new LogOutResponse("See you later Alice");
+        when(authenticationManagementService.logOutClient()).thenReturn(logOutResponse);
 
         LogOutResponse result = authenticationManagementController.logOutClient();
 
-        assertEquals(LogOutResponse, result);
+        assertEquals(logOutResponse, result);
         verify(authenticationManagementService).logOutClient();
     }
 }

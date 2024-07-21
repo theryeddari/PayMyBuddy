@@ -4,6 +4,7 @@ import com.thery.paymybuddy.dto.ProfileClientChangeRequest;
 import com.thery.paymybuddy.dto.ProfileClientChangeResponse;
 import com.thery.paymybuddy.dto.ProfileClientResponse;
 import com.thery.paymybuddy.dto.SavingClientResponse;
+import com.thery.paymybuddy.models.Client;
 import com.thery.paymybuddy.repository.ClientRepository;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
@@ -80,6 +81,34 @@ public class ClientService {
         } catch (Exception e) {
             logger.error("Error while retrieving saving client details: {}", e.getMessage());
             throw new GetSavingClientException(e);
+        }
+    }
+
+    public Client findByEmail(String email) throws FindByEmailException {
+        try {
+            Client client = clientRepository.findByEmail(email);
+            if (client == null) {
+                throw new ClientNotFoundException();
+            }
+            return client;
+        } catch (Exception e) {
+            throw new FindByEmailException(e);
+        }
+    }
+
+    public Client saveClient(Client client) throws SaveClientException {
+        try {
+            return clientRepository.save(client);
+        } catch (Exception e) {
+            throw new SaveClientException(e);
+        }
+    }
+
+    public boolean isExistClient(String email) throws IsExistClientException {
+        try {
+            return clientRepository.existsByEmail(email);
+        } catch (Exception e) {
+            throw new IsExistClientException(e);
         }
     }
 }

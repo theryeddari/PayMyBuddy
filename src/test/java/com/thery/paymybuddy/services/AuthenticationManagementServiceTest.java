@@ -1,10 +1,11 @@
 package com.thery.paymybuddy.services;
 
 import com.thery.paymybuddy.Services.AuthenticationManagementService;
+import com.thery.paymybuddy.Services.ClientService;
 import com.thery.paymybuddy.configs.security.JwtClientServiceConfig;
+import com.thery.paymybuddy.constants.MessagesServicesConstants;
 import com.thery.paymybuddy.dto.*;
 import com.thery.paymybuddy.models.Client;
-import com.thery.paymybuddy.repository.ClientRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static com.thery.paymybuddy.Exceptions.AuthenticationManagementServiceException.*;
+import static com.thery.paymybuddy.Exceptions.ClientServiceException.*;
 import static com.thery.paymybuddy.constants.MessagesServicesConstants.LOG_OUT_SUCCESS;
 import static com.thery.paymybuddy.constants.MessagesServicesConstants.SIGN_IN_SUCCESS;
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,7 +31,7 @@ import static org.mockito.Mockito.*;
 public class AuthenticationManagementServiceTest {
 
     @Mock
-    private ClientRepository clientRepository;
+    private ClientService clientService;
 
     @Mock
     private PasswordEncoder clientPasswordEncoder;
@@ -49,7 +51,7 @@ public class AuthenticationManagementServiceTest {
         when(authenticationConfiguration.getAuthenticationManager()).thenReturn(authenticationManager);
 
         this.authenticationManagementService = new AuthenticationManagementService(
-                clientRepository,
+                clientService,
                 clientPasswordEncoder,
                 authenticationConfiguration,
                 jwtClientServiceConfig
@@ -61,27 +63,24 @@ public class AuthenticationManagementServiceTest {
     public void testSignUpClient_Success() throws Exception {
         SignUpRequest newClient = new SignUpRequest("testUser", "test@example.com", "password123");
 
-
-        when(clientRepository.findByEmail(newClient.getEmail())).thenReturn(null);
+        when(clientService.isExistClient(newClient.getEmail())).thenReturn(false);
         when(clientPasswordEncoder.encode(newClient.getPassword())).thenReturn("encodedPassword");
 
         Client client = mock(Client.class);
         when(client.getUsername()).thenReturn("testUser");
-        when(client.getEmail()).thenReturn("test@example.com");
-        when(clientRepository.save(any(Client.class))).thenReturn(client);
+        when(clientService.saveClient(any(Client.class))).thenReturn(client);
 
         SignUpResponse response = authenticationManagementService.signUpClient(newClient);
 
         assertNotNull(response);
-        assertEquals("testUser", response.getUsername());
-        assertEquals("test@example.com", response.getEmail());
+        assertEquals(MessagesServicesConstants.SIGN_UP_SUCCESS, response.getMessageSuccess());
     }
 
     @Test
-    public void testSignUpClient_Exception_ClientAlreadyExists() {
+    public void testSignUpClient_Exception_ClientAlreadyExists() throws IsExistClientException {
         SignUpRequest newClient = new SignUpRequest("testUser", "test@example.com", "password123");
 
-        when(clientRepository.findByEmail(newClient.getEmail())).thenReturn(new Client());
+        when(clientService.isExistClient(newClient.getEmail())).thenReturn(true);
 
         Exception exception = assertThrows(SignUpClientException.class, () -> authenticationManagementService.signUpClient(newClient));
         assertEquals(ClientAlreadyExistException.class,exception.getCause().getClass());
@@ -91,15 +90,15 @@ public class AuthenticationManagementServiceTest {
     public void testSignInClient_Success() throws Exception {
 
         //input element for method and output
-        SignInRequest SignInRequest = new SignInRequest("alice@exemple.com", "alicep");
+        SignInRequest signInRequest = new SignInRequest("alice@exemple.com", "alicep");
         SignInResponseDTO exceptedSignInResponseDto = new SignInResponseDTO("jwtToken",new SignInResponse(SIGN_IN_SUCCESS));
 
         Client client = mock(Client.class);
         when(client.getId()).thenReturn(1L);
-        when(clientRepository.findByEmail(SignInRequest.getEmail())).thenReturn(client);
+        when(clientService.findByEmail(signInRequest.getEmail())).thenReturn(client);
 
 
-        UsernamePasswordAuthenticationToken credential = new UsernamePasswordAuthenticationToken(1L, SignInRequest.getPassword());
+        UsernamePasswordAuthenticationToken credential = new UsernamePasswordAuthenticationToken(1L, signInRequest.getPassword());
         Authentication authentication = mock(Authentication.class);
         when(authenticationManager.authenticate(credential)).thenReturn(authentication);
 
@@ -108,7 +107,7 @@ public class AuthenticationManagementServiceTest {
 
         when(jwtClientServiceConfig.generateToken(any(Authentication.class))).thenReturn("jwtToken");
 
-        SignInResponseDTO response = authenticationManagementService.signInClient(SignInRequest);
+        SignInResponseDTO response = authenticationManagementService.signInClient(signInRequest);
 
         verify(securityContext).setAuthentication(authentication);
 
@@ -118,13 +117,14 @@ public class AuthenticationManagementServiceTest {
         }
 
     @Test
-    public void testSignInClient_Exception_TOCREATE() {
-        SignInRequest SignInRequest = new SignInRequest("test@example.com", "password123");
+    public void testSignInClient_Exception() throws FindByEmailException {
+        SignInRequest signInRequest = new SignInRequest("test@example.com", "password123");
 
-        when(clientRepository.findByEmail(SignInRequest.getEmail())).thenReturn(null);
+        when(clientService.findByEmail(signInRequest.getEmail())).thenThrow(new FindByEmailException(new ClientNotFoundException()));
 
-        Exception exceptedException = assertThrows(SignInClientException.class, () -> authenticationManagementService.signInClient(SignInRequest));
-        assertEquals(RuntimeException.class, exceptedException.getCause().getClass());
+        Exception exceptedException = assertThrows(SignInClientException.class, () -> authenticationManagementService.signInClient(signInRequest));
+        assertEquals(FindByEmailException.class, exceptedException.getCause().getClass());
+        assertEquals(ClientNotFoundException.class, exceptedException.getCause().getCause().getClass());
     }
 
     @Test

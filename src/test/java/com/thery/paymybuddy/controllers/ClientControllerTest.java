@@ -29,40 +29,40 @@ class ClientControllerTest {
     @Test
     void getProfile_success() throws Exception {
 
-        ProfileClientResponse ProfileClientResponse = new ProfileClientResponse("Alice", "alice@gmail.com");
+        ProfileClientResponse profileClientResponse = new ProfileClientResponse("Alice", "alice@gmail.com");
 
-        when(clientService.getProfile()).thenReturn(ProfileClientResponse);
+        when(clientService.getProfile()).thenReturn(profileClientResponse);
 
 
         ProfileClientResponse result = clientController.getProfile();
 
 
-        assertEquals(ProfileClientResponse, result);
+        assertEquals(profileClientResponse, result);
         verify(clientService).getProfile();
     }
 
     @Test
     void changeProfile_success() throws Exception {
-        ProfileClientChangeRequest ProfileClientChangeRequest = new ProfileClientChangeRequest("Alice", "alice@gmail.com","alicep");
-        ProfileClientChangeResponse ProfileClientChangeResponse = new ProfileClientChangeResponse("Alice", "alice@gmail.com","Profile successful changed");
+        ProfileClientChangeRequest profileClientChangeRequest = new ProfileClientChangeRequest("Alice", "alice@gmail.com","alicep");
+        ProfileClientChangeResponse profileClientChangeResponse = new ProfileClientChangeResponse("Profile successful changed");
 
-        when(clientService.changeProfile(any(ProfileClientChangeRequest.class))).thenReturn(ProfileClientChangeResponse);
+        when(clientService.changeProfile(any(ProfileClientChangeRequest.class))).thenReturn(profileClientChangeResponse);
 
-        ProfileClientChangeResponse result = clientController.changeProfile(ProfileClientChangeRequest);
+        ProfileClientChangeResponse result = clientController.changeProfile(profileClientChangeRequest);
 
-        assertEquals(ProfileClientChangeResponse, result);
+        assertEquals(profileClientChangeResponse, result);
         verify(clientService).changeProfile(any(ProfileClientChangeRequest.class));
     }
 
     @Test
     void getSavingClient_success() throws Exception {
-        SavingClientResponse SavingClientResponse = new SavingClientResponse(1000.0);
+        SavingClientResponse savingClientResponse = new SavingClientResponse(1000.0);
 
-        when(clientService.getSavingClient()).thenReturn(SavingClientResponse);
+        when(clientService.getSavingClient()).thenReturn(savingClientResponse);
 
         SavingClientResponse result = clientController.getSavingClient();
 
-        assertEquals(SavingClientResponse, result);
+        assertEquals(savingClientResponse, result);
         verify(clientService).getSavingClient();
     }
 }

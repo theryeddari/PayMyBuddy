@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import static com.thery.paymybuddy.Exceptions.AuthenticationManagementServiceException.*;
+import static com.thery.paymybuddy.Exceptions.ClientServiceException.*;
 import static com.thery.paymybuddy.constants.MessageExceptionConstants.*;
 import static com.thery.paymybuddy.constants.MessageExceptionConstants.CLIENT_ALREADY_EXISTS_EXCEPTION;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,13 +46,13 @@ public class AuthenticationManagementControllerAdviceTest {
         }
     @Test
     public void testHandleSignInClient_ClientNotFoundException() {
-        String email = "test@exemple.com";
-        SignInClientException ex = new SignInClientException(new ClientNotFoundException(email));
+        RuntimeException cause = new RuntimeException();
+        SignInClientException ex = new SignInClientException(new FindByEmailException(cause));
 
         ResponseEntity<String> response = advice.handleSignInClientException(ex);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertEquals(CLIENT_NOT_FOUND_EXCEPTION + email, response.getBody());
+        assertEquals(CLIENT_NOT_FOUND_EXCEPTION, response.getBody());
     }
 
 

@@ -1,11 +1,14 @@
 package com.thery.paymybuddy.services;
 
 import static com.thery.paymybuddy.Exceptions.ClientServiceException.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 import com.thery.paymybuddy.Services.ClientService;
 import com.thery.paymybuddy.dto.*;
 import com.thery.paymybuddy.dto.ProfileClientChangeRequest;
+import com.thery.paymybuddy.models.Client;
 import com.thery.paymybuddy.repository.ClientRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -52,5 +55,47 @@ public class ClientServiceTest {
     @Test
     public void testGetSavingClient_Exception() throws GetSavingClientException {
         assertThrows(GetSavingClientException.class, () -> clientService.getSavingClient());
+    }
+    @Test
+    public void testFindByEmail_Success() throws FindByEmailException {
+        when(clientRepository.findByEmail(anyString())).thenReturn(new Client());
+        Client client = clientService.findByEmail(anyString());
+        assertNotNull(client);
+    }
+
+    @Test
+    public void testFindByEmail_ClientNotFoundException() {
+        when(clientRepository.findByEmail(anyString())).thenReturn(null);
+        Exception exceptionExcepted = assertThrows(FindByEmailException.class, () -> clientService.findByEmail(anyString()));
+        assertEquals(ClientNotFoundException.class, exceptionExcepted.getCause().getClass());
+    }
+
+    @Test
+    public void testIsExistClient_Success() throws IsExistClientException {
+        when(clientRepository.existsByEmail(anyString())).thenReturn(true);
+        boolean client = clientService.isExistClient(anyString());
+        assertTrue(client);
+    }
+
+    @Test
+    public void testIsExistClient_ClientNotFound() throws IsExistClientException {
+        when(clientRepository.existsByEmail(anyString())).thenReturn(false);
+        boolean client = clientService.isExistClient(anyString());
+        assertFalse(client);
+    }
+    @Test
+    public void testSaveClient_Success() throws SaveClientException {
+        Client client = new Client();
+        when(clientRepository.save(client)).thenReturn(client);
+        Client savedClient = clientService.saveClient(client);
+        assertNotNull(savedClient);
+    }
+
+    @Test
+    public void testSaveClient_IllegalArgumentException() {
+        Client client = new Client();
+        when(clientRepository.save(client)).thenThrow(IllegalArgumentException.class);
+        Exception exceptionExcepted = assertThrows(SaveClientException.class, () -> clientService.saveClient(client));
+        assertEquals(IllegalArgumentException.class, exceptionExcepted.getCause().getClass());
     }
 }

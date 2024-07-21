@@ -16,13 +16,16 @@ public class MessageExceptionConstants {
     public static final String LOG_OUT_CLIENT_EXCEPTION = "Error while LogOut Client";
     public static final String CLIENT_ALREADY_EXISTS_EXCEPTION = "User already exists, use login page";
     public static final String GET_ID_CLIENT_FROM_CONTEXT_EXCEPTION = "Error when getting id from context";
-    public static final String CLIENT_NOT_FOUND_EXCEPTION = "Error when getting client from this email, check your credentials ";
 
 
     // Client Exception messages
     public static final String GET_PROFILE_EXCEPTION = "Error while getting information about a Client";
     public static final String CHANGE_PROFILE_EXCEPTION = "Error while save new information about Client";
     public static final String GET_SAVING_CLIENT_EXCEPTION = "Error while get saving information about Client";
+    public static final String CLIENT_FIND_BY_EMAIL_EXCEPTION = "Error when getting client from this email";
+    public static final String CLIENT_NOT_FOUND_EXCEPTION = "Client not found with this email, check your credentials ";
+    public static final String CLIENT_BACKUP_EXCEPTION = "error while saving the customer profile ";
+    public static final String CLIENT_IS_EXIST_EXCEPTION = "error while check client exist ";
 
     // RelationShips Exception messages
     public static final String ADD_RELATIONSHIPS_EXCEPTION = "Error while adding relationships about Client";

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import static com.thery.paymybuddy.Exceptions.AuthenticationManagementServiceException.*;
+import static com.thery.paymybuddy.Exceptions.ClientServiceException.*;
 import static com.thery.paymybuddy.constants.MessageExceptionConstants.*;
 
 /**
@@ -28,7 +29,7 @@ public class AuthenticationManagementControllerAdvice {
     public ResponseEntity<String> handleSignUpClientException(SignUpClientException ex) {
         logger.error("{}", ex.getMessage());
         if (ex.getCause() instanceof ClientAlreadyExistException) {
-            return new ResponseEntity<>(ex.getCause().getMessage(), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(CLIENT_ALREADY_EXISTS_EXCEPTION, HttpStatus.CONFLICT);
         }
         return new ResponseEntity<>(SIGN_UP_CLIENT_EXCEPTION, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -42,8 +43,8 @@ public class AuthenticationManagementControllerAdvice {
     @ExceptionHandler(SignInClientException.class)
     public ResponseEntity<String> handleSignInClientException(SignInClientException ex) {
         logger.error("{}", ex.getMessage());
-        if (ex.getCause() instanceof ClientNotFoundException) {
-            return new ResponseEntity<>(ex.getCause().getMessage(), HttpStatus.NOT_FOUND);
+        if (ex.getCause() instanceof FindByEmailException) {
+            return new ResponseEntity<>(CLIENT_NOT_FOUND_EXCEPTION, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(SIGN_IN_CLIENT_EXCEPTION, HttpStatus.INTERNAL_SERVER_ERROR);
     }

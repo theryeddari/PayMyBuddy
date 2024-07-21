@@ -35,7 +35,7 @@ public class AuthenticationManagementControllerAdviceTest {
         }
 
         @Test
-        public void testHandleSignInClientException() {
+        public void testHandleSignInClient_Exception() {
             SignInClientException ex = new SignInClientException(new RuntimeException());
 
             ResponseEntity<String> response = advice.handleSignInClientException(ex);
@@ -43,6 +43,17 @@ public class AuthenticationManagementControllerAdviceTest {
             assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
             assertEquals(SIGN_IN_CLIENT_EXCEPTION, response.getBody());
         }
+    @Test
+    public void testHandleSignInClient_ClientNotFoundException() {
+        String email = "test@exemple.com";
+        SignInClientException ex = new SignInClientException(new ClientNotFoundException(email));
+
+        ResponseEntity<String> response = advice.handleSignInClientException(ex);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals(CLIENT_NOT_FOUND_EXCEPTION + email, response.getBody());
+    }
+
 
         @Test
         public void testHandleLogOutClientException() {

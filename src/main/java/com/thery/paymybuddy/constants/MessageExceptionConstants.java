@@ -16,6 +16,8 @@ public class MessageExceptionConstants {
     public static final String LOG_OUT_CLIENT_EXCEPTION = "Error while LogOut Client";
     public static final String CLIENT_ALREADY_EXISTS_EXCEPTION = "User already exists, use login page";
     public static final String GET_ID_CLIENT_FROM_CONTEXT_EXCEPTION = "Error when getting id from context";
+    public static final String CLIENT_NOT_FOUND_EXCEPTION = "Error when getting client from this email, check your credentials ";
+
 
     // Client Exception messages
     public static final String GET_PROFILE_EXCEPTION = "Error while getting information about a Client";

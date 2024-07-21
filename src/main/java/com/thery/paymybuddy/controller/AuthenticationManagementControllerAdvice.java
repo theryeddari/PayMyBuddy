@@ -42,6 +42,9 @@ public class AuthenticationManagementControllerAdvice {
     @ExceptionHandler(SignInClientException.class)
     public ResponseEntity<String> handleSignInClientException(SignInClientException ex) {
         logger.error("{}", ex.getMessage());
+        if (ex.getCause() instanceof ClientNotFoundException) {
+            return new ResponseEntity<>(ex.getCause().getMessage(), HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(SIGN_IN_CLIENT_EXCEPTION, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

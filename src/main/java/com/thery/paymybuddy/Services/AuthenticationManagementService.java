@@ -95,8 +95,8 @@ public class AuthenticationManagementService {
         try {
             Optional<Client> client = Optional.ofNullable(clientRepository.findByEmail(SignInRequest.getEmail()));
             if (client.isEmpty()) {
-                throw new RuntimeException("Client not found");
-                //TODO: code and add ClientNotFoundException() in AuthenticationManagementServiceException.java;
+                logger.error("Client had not found {}", signInDTO.getEmail());
+                throw new ClientNotFoundException(signInDTO.getEmail());
             }
             Long clientId = client.get().getId();
             UsernamePasswordAuthenticationToken credential = new UsernamePasswordAuthenticationToken(clientId, SignInRequest.getPassword());

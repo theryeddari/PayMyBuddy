@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import static com.thery.paymybuddy.Exceptions.RelationShipsServiceException.*;
+import static com.thery.paymybuddy.Exceptions.RelationShipsServiceException.RelationshipsAlreadyExistException.*;
 import static com.thery.paymybuddy.constants.MessageExceptionConstants.*;
 
 
@@ -28,6 +29,12 @@ public class RelationShipsControllerAdvice {
     @ExceptionHandler(AddRelationShipsException.class)
     public ResponseEntity<String> handleAddRelationShipsException(AddRelationShipsException ex) {
         logger.error("{}", ex.getMessage());
+        if (ex.getCause() instanceof RelationshipsAlreadyExistException) {
+            return new ResponseEntity<>(RELATIONSHIPS_ALREADY_EXIST_EXCEPTION, HttpStatus.CONFLICT);
+        }
+        if (ex.getCause() instanceof SelfOrientedRelationshipException) {
+            return new ResponseEntity<>(SELF_ORIENTED_RELATIONSHIP_EXCEPTION, HttpStatus.CONFLICT);
+        }
         return new ResponseEntity<>(ADD_RELATIONSHIPS_EXCEPTION, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

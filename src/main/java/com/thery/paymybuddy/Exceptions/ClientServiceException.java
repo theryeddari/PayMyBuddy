@@ -1,5 +1,7 @@
 package com.thery.paymybuddy.Exceptions;
 
+import com.thery.paymybuddy.constants.MessageExceptionConstants;
+
 import static com.thery.paymybuddy.constants.MessageExceptionConstants.*;
 
 /**
@@ -71,7 +73,7 @@ public class ClientServiceException extends Exception {
     }
 
     /**
-     * Exception class for client find operation errors.
+     * Exception class for client find by email operation errors.
      */
     public static class FindByEmailException extends ClientServiceException {
         /**
@@ -106,7 +108,7 @@ public class ClientServiceException extends Exception {
          * @param cause The cause of the exception
          */
         public SaveClientException(Exception cause) {
-            super(CLIENT_BACKUP_EXCEPTION + " " + cause.getClass() + " " + cause.getMessage(), cause);
+            super(CLIENT_BACKUP_EXCEPTION + MORE_INFO + " " + cause.getClass() + " " + cause.getMessage(), cause);
         }
     }
     /**
@@ -119,7 +121,34 @@ public class ClientServiceException extends Exception {
          * @param cause The cause of the exception
          */
         public IsExistClientException(Exception cause) {
-            super(CLIENT_IS_EXIST_EXCEPTION  + " " + cause.getClass() + " " + cause.getMessage(), cause);
+            super(CLIENT_IS_EXIST_EXCEPTION + MORE_INFO + " " + cause.getClass() + " " + cause.getMessage(), cause);
         }
     }
+    /**
+     * Exception class for client find operation errors.
+     */
+    public static class FindByIdException extends ClientServiceException {
+        /**
+         * Constructs a FindByEmailException with the cause of the exception.
+         *
+         * @param cause The cause of the exception
+         */
+        public FindByIdException(Exception cause) {
+            super(CLIENT_FIND_BY_ID_EXCEPTION + MORE_INFO + " " + cause.getClass() + " " + cause.getMessage(), cause);
+        }
+    }
+
+    /**
+     * Exception class for incoherence not found authenticated client operation errors.
+     */
+    public static class AuthenticatedClientNotFoundException extends ClientServiceException {
+        /**
+         * Constructs a IsExistClientException
+         */
+        public AuthenticatedClientNotFoundException() {
+            super(MessageExceptionConstants.AUTHENTICATE_CLIENT_NOT_FOUND_EXCEPTION);
+        }
+    }
+
+
 }

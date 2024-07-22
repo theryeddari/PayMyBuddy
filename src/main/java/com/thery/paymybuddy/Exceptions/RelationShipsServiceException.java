@@ -18,6 +18,16 @@ public class RelationShipsServiceException extends Exception {
     }
 
     /**
+     * Constructs a new RelationshipsServiceException with the specified detail message.
+     *
+     * @param message The detail message (which is saved for later retrieval by the getMessage() method)
+     */
+    public RelationShipsServiceException(String message) {
+        super(message);
+    }
+
+
+    /**
      * Exception class for handling errors specifically related to adding relationships.
      */
     public static class AddRelationShipsException extends RelationShipsServiceException {
@@ -44,6 +54,30 @@ public class RelationShipsServiceException extends Exception {
          */
         public RelationShipsDetailForTransferException(Throwable cause) {
             super(RELATIONSHIPS_DETAIL_FOR_TRANSFER_EXCEPTION + MORE_INFO + cause.getClass() + " " + cause.getMessage(), cause);
+        }
+    }
+
+    /**
+     * Exception class for handling errors related to add relationship about client.
+     */
+    public static class RelationshipsAlreadyExistException extends RelationShipsServiceException {
+        /**
+         * Constructs a new RelationshipsAlreadyExistException with the specified cause.
+         */
+        public RelationshipsAlreadyExistException() {
+            super(RELATIONSHIPS_ALREADY_EXIST_EXCEPTION);
+        }
+
+        /**
+         * Exception class for handling errors related to add one self relationship.
+         */
+        public static class SelfOrientedRelationshipException extends RelationShipsServiceException {
+            /**
+             * Constructs a new RelationshipsAlreadyExistException with the specified cause.
+             */
+            public SelfOrientedRelationshipException() {
+                super(SELF_ORIENTED_RELATIONSHIP_EXCEPTION);
+            }
         }
     }
 

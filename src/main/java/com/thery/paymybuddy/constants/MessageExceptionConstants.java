@@ -23,13 +23,17 @@ public class MessageExceptionConstants {
     public static final String CHANGE_PROFILE_EXCEPTION = "Error while save new information about Client";
     public static final String GET_SAVING_CLIENT_EXCEPTION = "Error while get saving information about Client";
     public static final String CLIENT_FIND_BY_EMAIL_EXCEPTION = "Error when getting client from this email";
-    public static final String CLIENT_NOT_FOUND_EXCEPTION = "Client not found with this email, check your credentials ";
+    public static final String CLIENT_NOT_FOUND_EXCEPTION = "Client not found with this email, check it ";
     public static final String CLIENT_BACKUP_EXCEPTION = "error while saving the customer profile ";
     public static final String CLIENT_IS_EXIST_EXCEPTION = "error while check client exist ";
+    public static final String AUTHENTICATE_CLIENT_NOT_FOUND_EXCEPTION = "An unexpected error has occurred and references to the authenticated client are not available" ;
+    public static final String CLIENT_FIND_BY_ID_EXCEPTION = "Error when getting client from this id";
 
     // RelationShips Exception messages
     public static final String ADD_RELATIONSHIPS_EXCEPTION = "Error while adding relationships about Client";
     public static final String RELATIONSHIPS_DETAIL_FOR_TRANSFER_EXCEPTION = "Error while get history of transfer's Client";
+    public static final String RELATIONSHIPS_ALREADY_EXIST_EXCEPTION = "Your already in relationships with this client ";
+    public static final String SELF_ORIENTED_RELATIONSHIP_EXCEPTION = "You can't create relationships with yourself ";
 
     // Transaction Exception messages
     public static final String GET_GENERAL_TRANSFER_DETAIL_EXCEPTION = "Error while getting history of all transaction detail about Client";

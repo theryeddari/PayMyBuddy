@@ -14,14 +14,13 @@ public class ClientRelationshipsRepositoryIT {
     ClientRelationshipsRepository clientRelationshipsRepository;
 
     @Test
-    void testConnexionWithExistsClientFriendsByMailAndId() {
+    void testExistsClientRelationshipsByClient_idAndFriendEmail_Success() {
     boolean exist = clientRelationshipsRepository.existsClientRelationshipsByClient_idAndFriendEmail(1L,"bob@example.com");
         Assertions.assertTrue(exist);
     }
     @Test
-    void testConnexionWithNotExistsClientFriendsByMailAndId() {
+    void testExistsClientRelationshipsByClient_idAndFriendEmail_NotFound() {
         boolean exist = clientRelationshipsRepository.existsClientRelationshipsByClient_idAndFriendEmail(2L,"alice@example.com");
         Assertions.assertFalse(exist);
     }
-
 }

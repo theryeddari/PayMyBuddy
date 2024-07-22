@@ -11,6 +11,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 import static com.thery.paymybuddy.Exceptions.ClientServiceException.*;
 
 /**
@@ -110,5 +112,17 @@ public class ClientService {
         } catch (Exception e) {
             throw new IsExistClientException(e);
         }
+    }
+    public Client findById(Long clientId) throws FindByIdException {
+        try {
+            Optional<Client> client = clientRepository.findById(clientId);
+            if (client.isEmpty()){
+                throw new AuthenticatedClientNotFoundException();
+            }
+            return client.get();
+        } catch (Exception e) {
+            throw new FindByIdException(e);
+        }
+
     }
 }

@@ -24,6 +24,27 @@ public class RelationShipsControllerAdviceTest {
     }
 
     @Test
+    public void testHandleAddRelationShips_RelationshipsAlreadyExistException() {
+        AddRelationShipsException ex = new AddRelationShipsException(new RelationshipsAlreadyExistException());
+
+        ResponseEntity<String> response = advice.handleAddRelationShipsException(ex);
+
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        assertEquals(RELATIONSHIPS_ALREADY_EXIST_EXCEPTION, response.getBody());
+    }
+
+    @Test
+    public void testHandleAddRelationShips_SelfOrientedRelationshipException() {
+        AddRelationShipsException ex = new AddRelationShipsException(new RelationshipsAlreadyExistException());
+
+        ResponseEntity<String> response = advice.handleAddRelationShipsException(ex);
+
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        assertEquals(RELATIONSHIPS_ALREADY_EXIST_EXCEPTION, response.getBody());
+    }
+
+
+    @Test
     public void testHandleRelationShipsDetailForTransferException() {
         RelationShipsDetailForTransferException ex = new RelationShipsDetailForTransferException(new RuntimeException());
 

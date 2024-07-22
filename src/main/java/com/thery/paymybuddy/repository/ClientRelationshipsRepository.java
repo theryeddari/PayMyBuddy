@@ -16,7 +16,8 @@ public interface ClientRelationshipsRepository extends JpaRepository<ClientRelat
     *
     * @param clientId   The ID of the client.
     * @param friendMail The email of the friend.
-    * @return {@code true} if a relationship exists, {@code false} otherwise.
+    * @return ClientRelationShips save
     */
    boolean existsClientRelationshipsByClient_idAndFriendEmail(long clientId, String friendMail);
+
 }

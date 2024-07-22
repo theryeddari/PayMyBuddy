@@ -35,8 +35,8 @@ public class RelationShipsController {
      * @return DTO indicating success or failure of adding relationships
      */
     @PostMapping("/relationships")
-    @ResponseStatus(HttpStatus.OK)
-    public AddRelationShipsResponse addRelationShips(AddRelationShipsRequest addRelationShips) throws AddRelationShipsException {
+    @ResponseStatus(HttpStatus.CREATED)
+    public AddRelationShipsResponse addRelationShips(@RequestBody AddRelationShipsRequest addRelationShips) throws AddRelationShipsException {
         logger.info("Received request to add new relationship.");
         AddRelationShipsResponse addRelationShipsResponse = relationShipsService.addRelationShips(addRelationShips);
         logger.info("Relationship added successfully.");

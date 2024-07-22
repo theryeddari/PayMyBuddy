@@ -5,6 +5,8 @@ import com.thery.paymybuddy.models.ClientRelationshipsPrimaryKeyComposite;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Repository interface for managing ClientRelationships entities.
  */
@@ -20,4 +22,11 @@ public interface ClientRelationshipsRepository extends JpaRepository<ClientRelat
     */
    boolean existsClientRelationshipsByClient_idAndFriendEmail(long clientId, String friendMail);
 
+   /**
+    * retrieve ClientRelationships list of a client.
+    *
+    * @param clientId   The ID of the client.
+    * @return list of ClientRelationShips
+    */
+   List<ClientRelationships> findClientRelationshipsByClientId(long clientId);
 }

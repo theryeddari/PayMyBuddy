@@ -1,6 +1,5 @@
 package com.thery.paymybuddy.Services;
 
-import com.thery.paymybuddy.constants.MessagesServicesConstants;
 import com.thery.paymybuddy.dto.AddRelationShipsRequest;
 import com.thery.paymybuddy.dto.AddRelationShipsResponse;
 import com.thery.paymybuddy.dto.RelationShipsDetailForTransferResponse;
@@ -8,12 +7,13 @@ import com.thery.paymybuddy.models.Client;
 import com.thery.paymybuddy.models.ClientRelationships;
 import com.thery.paymybuddy.repository.ClientRelationshipsRepository;
 import jakarta.transaction.Transactional;
-import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 import static com.thery.paymybuddy.Exceptions.RelationShipsServiceException.*;
+import static com.thery.paymybuddy.constants.MessagesServicesConstants.*;
 
 /**
  * Service for managing relationships between clients.
@@ -57,11 +57,12 @@ public class RelationShipsService {
             clientRelationships.setFriend(friend);
             clientRelationships.setClient(client);
 
-            ClientRelationships clientRelationshipsSaved = clientRelationshipsRepository.save(clientRelationships);
+            clientRelationshipsRepository.save(clientRelationships);
 
-            AddRelationShipsResponse result = new AddRelationShipsResponse();
+            AddRelationShipsResponse result = new AddRelationShipsResponse(ADD_RELATION_SUCCESS);
 
             logger.info("Successfully added new relationship.");
+
             return result;
         } catch (Exception e) {
             logger.error("Error while adding relationship: {}", e.getMessage());
@@ -75,11 +76,19 @@ public class RelationShipsService {
      * @return a DTO containing the details of relationships for transfer
      * @throws RelationShipsDetailForTransferException if an error occurs while retrieving the details
      */
+    @Transactional
     public RelationShipsDetailForTransferResponse relationShipsDetailForTransfer() throws RelationShipsDetailForTransferException {
         logger.debug("Retrieving relationship details for transfer.");
         try {
-            // Perform the relationship detail retrieval logic here
-            RelationShipsDetailForTransferResponse result = new RelationShipsDetailForTransferResponse();
+            long clientId = Long.parseLong(authenticationManagementService.getIdClientFromContext());
+
+            List<ClientRelationships> listFriendClientRelationships = clientRelationshipsRepository.findClientRelationshipsByClientId(clientId);
+
+            List<String> listEmailFriends = listFriendClientRelationships.stream()
+                    .map(ClientRelationships::getFriend)
+                    .map(Client::getEmail)
+                    .toList();
+            RelationShipsDetailForTransferResponse result = new RelationShipsDetailForTransferResponse(listEmailFriends);
             logger.info("Successfully retrieved relationship details for transfer.");
             return result;
         } catch (Exception e) {

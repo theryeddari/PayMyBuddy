@@ -2,9 +2,9 @@ package com.thery.paymybuddy.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thery.paymybuddy.configs.security.JwtClientServiceConfig;
-import com.thery.paymybuddy.constants.MessagesServicesConstants;
 import com.thery.paymybuddy.dto.AddRelationShipsRequest;
 import com.thery.paymybuddy.dto.AddRelationShipsResponse;
+import com.thery.paymybuddy.dto.RelationShipsDetailForTransferResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +17,15 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import static com.thery.paymybuddy.Exceptions.JwtClientServiceConfigException.*;
 import static com.thery.paymybuddy.constants.MessageExceptionConstants.RELATIONSHIPS_ALREADY_EXIST_EXCEPTION;
 import static com.thery.paymybuddy.constants.MessageExceptionConstants.SELF_ORIENTED_RELATIONSHIP_EXCEPTION;
+import static com.thery.paymybuddy.constants.MessagesServicesConstants.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -61,7 +64,7 @@ public class RelationShipsControllerIT {
     @Test
     public void testAddRelationShips_Success() throws Exception {
         AddRelationShipsRequest addRelationShipsRequest = new AddRelationShipsRequest("alice@example.com");
-        AddRelationShipsResponse addRelationShipsResponse = new AddRelationShipsResponse(MessagesServicesConstants.ADD_RELATION_SUCCESS);
+        AddRelationShipsResponse addRelationShipsResponse = new AddRelationShipsResponse(ADD_RELATION_SUCCESS);
 
         mockMvc.perform(post("/api/fr/client/dashboard/relationships")
                         .header("Authorization", "Bearer " + jwtTokenBob)
@@ -92,5 +95,16 @@ public class RelationShipsControllerIT {
                         .content(objectMapper.writeValueAsString(addRelationShipsRequest)))
                 .andExpect(status().isConflict())
                 .andExpect(content().string(SELF_ORIENTED_RELATIONSHIP_EXCEPTION));
+    }
+
+    @Test
+    public void testRelationShipsDetailForTransfer_Success() throws Exception {
+        RelationShipsDetailForTransferResponse relationShipsDetailForTransferResponse = new RelationShipsDetailForTransferResponse(List.of("bob@example.com","carol@example.com","dave@example.com"));
+
+        mockMvc.perform(get("/api/fr/client/dashboard/relationships")
+                        .header("Authorization", "Bearer " + jwtTokenAlice)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(relationShipsDetailForTransferResponse)));
     }
 }

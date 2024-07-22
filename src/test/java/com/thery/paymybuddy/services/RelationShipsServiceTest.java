@@ -3,7 +3,7 @@ package com.thery.paymybuddy.services;
 import static com.thery.paymybuddy.Exceptions.AuthenticationManagementServiceException.*;
 import static com.thery.paymybuddy.Exceptions.ClientServiceException.*;
 import static com.thery.paymybuddy.Exceptions.RelationShipsServiceException.*;
-import static com.thery.paymybuddy.constants.MessagesServicesConstants.ADD_RELATION_SUCCESS;
+import static com.thery.paymybuddy.constants.MessagesServicesConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -23,6 +23,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.List;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -94,12 +95,34 @@ public class RelationShipsServiceTest {
     }
 
     @Test
-    public void testRelationShipsDetailForTransfer_Success() throws RelationShipsDetailForTransferException {
-        RelationShipsDetailForTransferResponse actualDTO = relationShipsService.relationShipsDetailForTransfer();
+    public void testRelationShipsDetailForTransfer_Success() throws RelationShipsDetailForTransferException, GetIdClientFromContextException {
+        String clientId = "2";
+
+        when(authenticationManagementService.getIdClientFromContext()).thenReturn(clientId);
+
+        ClientRelationships clientRelationships = mock(ClientRelationships.class);
+        Client client = mock(Client.class);
+
+        when(clientRelationships.getFriend()).thenReturn(client);
+        when(client.getEmail()).thenReturn("alice@exemple.com");
+
+        List<ClientRelationships> listFriendClientRelationShips = List.of(clientRelationships);
+        when(clientRelationshipsRepository.findClientRelationshipsByClientId(anyLong())).thenReturn(listFriendClientRelationShips);
+
+        // Appeler la méthode réelle du service
+        RelationShipsDetailForTransferResponse relationShipsDetailForTransferResponse = relationShipsService.relationShipsDetailForTransfer();
+
+        // Vérifier le résultat attendu
+        assertEquals(client.getEmail(), relationShipsDetailForTransferResponse.getListFriendsRelationShipsEmail().getFirst());
+
     }
 
     @Test
-    public void testRelationShipsDetailForTransfer_Exception() throws RelationShipsDetailForTransferException {
-        assertThrows(RelationShipsDetailForTransferException.class, () -> relationShipsService.relationShipsDetailForTransfer());
+    public void testRelationShipsDetailForTransfer_Exception() throws GetIdClientFromContextException {
+        when(authenticationManagementService.getIdClientFromContext()).thenThrow(new GetIdClientFromContextException(new RuntimeException()));
+
+        Exception exception = assertThrows(RelationShipsDetailForTransferException.class, () -> relationShipsService.relationShipsDetailForTransfer());
+        assertEquals(GetIdClientFromContextException.class, exception.getCause().getClass());
+
     }
 }

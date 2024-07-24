@@ -138,28 +138,4 @@ public class AuthenticationManagementServiceTest {
         authenticationManagementService.logOutClient();
     }
 
-    @Test
-    public void testGetIdClientFromContext() throws Exception {
-
-        SecurityContext securityContext = mock(SecurityContext.class);
-        SecurityContextHolder.setContext(securityContext);
-
-        Authentication authentication = mock(Authentication.class);
-
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        when(authentication.getName()).thenReturn("1");
-        String id = authenticationManagementService.getIdClientFromContext();
-
-        assertEquals("1", id);
-    }
-
-    @Test
-    public void testGetIdClientFromContext_Exception() {
-        SecurityContext securityContext = mock(SecurityContext.class);
-        SecurityContextHolder.setContext(securityContext);
-
-        when(securityContext.getAuthentication()).thenThrow(RuntimeException.class);
-
-        assertThrows(GetIdClientFromContextException.class, () -> authenticationManagementService.getIdClientFromContext());
-    }
 }

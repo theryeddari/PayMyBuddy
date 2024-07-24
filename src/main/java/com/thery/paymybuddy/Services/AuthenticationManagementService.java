@@ -124,20 +124,4 @@ public class AuthenticationManagementService {
             throw new LogOutClientException(e);
         }
     }
-
-        /**
-         * Retrieves the username (email) from the JWT token.
-         *
-         * @return the username as a string
-         */
-
-        public String getIdClientFromContext() throws GetIdClientFromContextException {
-            try {
-                String id = SecurityContextHolder.getContext().getAuthentication().getName();
-                logger.debug("Retrieved id from Context: {}", id);
-                return id;
-            } catch (Exception e) {
-                throw new GetIdClientFromContextException(e);
-            }
-    }
 }

@@ -15,8 +15,6 @@ public class MessageExceptionConstants {
     public static final String SIGN_IN_CLIENT_EXCEPTION = "Error while sign in Client";
     public static final String LOG_OUT_CLIENT_EXCEPTION = "Error while LogOut Client";
     public static final String CLIENT_ALREADY_EXISTS_EXCEPTION = "User already exists, use login page";
-    public static final String GET_ID_CLIENT_FROM_CONTEXT_EXCEPTION = "Error when getting id from context";
-
 
     // Client Exception messages
     public static final String GET_PROFILE_EXCEPTION = "Error while getting information about a Client";
@@ -38,5 +36,8 @@ public class MessageExceptionConstants {
     // Transaction Exception messages
     public static final String GET_GENERAL_TRANSFER_DETAIL_EXCEPTION = "Error while getting history of all transaction detail about Client";
     public static final String DO_TRANSFER_EXCEPTION = "Error while doing transaction about Client, transaction canceled";
+
+    // Utils Information On Context Exception messages
+    public static final String GET_ID_CLIENT_FROM_CONTEXT_EXCEPTION = "Error when getting id from context";
 
 }

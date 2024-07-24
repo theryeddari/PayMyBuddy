@@ -6,6 +6,7 @@ import com.thery.paymybuddy.dto.RelationShipsDetailForTransferResponse;
 import com.thery.paymybuddy.models.Client;
 import com.thery.paymybuddy.models.ClientRelationships;
 import com.thery.paymybuddy.repository.ClientRelationshipsRepository;
+import com.thery.paymybuddy.utils.InformationOnContextUtils;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,12 +26,10 @@ public class RelationShipsService {
 
     private final ClientRelationshipsRepository clientRelationshipsRepository;
     private final ClientService clientService;
-    private final AuthenticationManagementService authenticationManagementService;
 
-    public RelationShipsService(ClientRelationshipsRepository clientRelationshipsRepository, ClientService clientService, AuthenticationManagementService authenticationManagementService) {
+    public RelationShipsService(ClientRelationshipsRepository clientRelationshipsRepository, ClientService clientService) {
         this.clientRelationshipsRepository = clientRelationshipsRepository;
         this.clientService = clientService;
-        this.authenticationManagementService = authenticationManagementService;
     }
 
     /**
@@ -44,7 +43,7 @@ public class RelationShipsService {
     public AddRelationShipsResponse addRelationShips(AddRelationShipsRequest addRelationShips) throws AddRelationShipsException {
         logger.debug("Adding new relationship: {}", addRelationShips);
         try {
-            long clientId = Long.parseLong(authenticationManagementService.getIdClientFromContext());
+            long clientId = Long.parseLong(InformationOnContextUtils.getIdClientFromContext());
             if(clientRelationshipsRepository.existsClientRelationshipsByClient_idAndFriendEmail(clientId, addRelationShips.getEmail())) {
                 throw new RelationshipsAlreadyExistException();
             }
@@ -80,7 +79,7 @@ public class RelationShipsService {
     public RelationShipsDetailForTransferResponse relationShipsDetailForTransfer() throws RelationShipsDetailForTransferException {
         logger.debug("Retrieving relationship details for transfer.");
         try {
-            long clientId = Long.parseLong(authenticationManagementService.getIdClientFromContext());
+            long clientId = Long.parseLong(InformationOnContextUtils.getIdClientFromContext());
 
             List<ClientRelationships> listFriendClientRelationships = clientRelationshipsRepository.findClientRelationshipsByClientId(clientId);
 

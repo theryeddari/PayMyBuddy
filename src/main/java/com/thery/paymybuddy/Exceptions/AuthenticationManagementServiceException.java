@@ -83,18 +83,4 @@ public class AuthenticationManagementServiceException extends Exception {
             super(CLIENT_ALREADY_EXISTS_EXCEPTION);
         }
     }
-
-    /**
-     * Exception class for get id's client operation errors.
-     */
-    public static class GetIdClientFromContextException extends AuthenticationManagementServiceException {
-        /**
-         * Constructs a GetIdClientFromContextException with the cause of the exception.
-         *
-         * @param cause The cause of the exception
-         */
-        public GetIdClientFromContextException(Exception cause) {
-            super(GET_ID_CLIENT_FROM_CONTEXT_EXCEPTION + MORE_INFO + cause.getClass() + " " + cause.getMessage(), cause);
-        }
-    }
 }

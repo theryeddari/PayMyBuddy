@@ -5,6 +5,7 @@ import com.thery.paymybuddy.configs.security.JwtClientServiceConfig;
 import com.thery.paymybuddy.dto.ProfileClientChangeRequest;
 import com.thery.paymybuddy.dto.ProfileClientChangeResponse;
 import com.thery.paymybuddy.dto.ProfileClientResponse;
+import com.thery.paymybuddy.dto.SavingClientResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import static com.thery.paymybuddy.Exceptions.JwtClientServiceConfigException.*;
-import static com.thery.paymybuddy.constants.MessageExceptionConstants.CHANGE_PROFILE_EXCEPTION;
-import static com.thery.paymybuddy.constants.MessageExceptionConstants.GET_PROFILE_EXCEPTION;
+import static com.thery.paymybuddy.constants.MessageExceptionConstants.*;
 import static com.thery.paymybuddy.constants.MessagesServicesConstants.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -104,4 +104,22 @@ public class ClientControllerIT {
                 .andExpect(content().string(CHANGE_PROFILE_EXCEPTION));
     }
 
+    @Test
+    void testGetSavingClient_Success() throws Exception {
+        SavingClientResponse savingClientResponse = new SavingClientResponse(100);
+
+        mockMvc.perform(get("/api/fr/client/dashboard/profil/saving")
+                        .header("Authorization", "Bearer " + jwtTokenAlice))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(savingClientResponse)));
+    }
+
+    @Test
+    void testGetSavingClient_Failed() throws Exception {
+
+        mockMvc.perform(get("/api/fr/client/dashboard/profil/saving")
+                        .header("Authorization", "Bearer " + jwtTokenUnknownAuthenticated))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().string(GET_SAVING_CLIENT_EXCEPTION));
+    }
 }

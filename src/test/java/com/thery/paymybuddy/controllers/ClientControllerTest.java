@@ -64,7 +64,7 @@ class ClientControllerTest {
 
         SavingClientResponse result = clientController.getSavingClient();
 
-        assertEquals(savingClientResponse, result);
         verify(clientService).getSavingClient();
+        assertEquals(savingClientResponse, result);
     }
 }

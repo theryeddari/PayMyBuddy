@@ -135,12 +135,25 @@ public class ClientServiceTest {
 
     @Test
     public void testGetSavingClient_Success() throws GetSavingClientException {
-        SavingClientResponse savingClientResponse = clientService.getSavingClient();
+        try (MockedStatic<InformationOnContextUtils> informationOnContextUtilsMockedStatic = mockStatic(InformationOnContextUtils.class)) {
+            // Mock the static method
+            informationOnContextUtilsMockedStatic.when(InformationOnContextUtils::getIdClientFromContext).thenReturn("1");
+            Client client = mock(Client.class);
+
+            when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
+            when(client.getSaving()).thenReturn(100.00);
+
+            SavingClientResponse savingClientResponse = clientService.getSavingClient();
+
+            assertEquals(100.00, savingClientResponse.getSaving());
+        }
     }
 
     @Test
-    public void testGetSavingClient_Exception() throws GetSavingClientException {
-        assertThrows(GetSavingClientException.class, () -> clientService.getSavingClient());
+    public void testGetSavingClient_Exception() {
+        Exception exception = assertThrows(GetSavingClientException.class, () -> clientService.getSavingClient());
+        assertEquals(GetIdClientFromContextException.class, exception.getCause().getClass());
+
     }
     @Test
     public void testFindByEmail_Success() throws FindByEmailException {

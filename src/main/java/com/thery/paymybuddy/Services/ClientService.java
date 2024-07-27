@@ -99,7 +99,9 @@ public class ClientService {
     public SavingClientResponse getSavingClient() throws GetSavingClientException {
         logger.info("Attempting to retrieve saving client details.");
         try {
-            return new SavingClientResponse();
+            long clientId = Long.parseLong(InformationOnContextUtils.getIdClientFromContext());
+            Client client = findById(clientId);
+            return new SavingClientResponse(client.getSaving());
         } catch (Exception e) {
             logger.error("Error while retrieving saving client details: {}", e.getMessage());
             throw new GetSavingClientException(e);

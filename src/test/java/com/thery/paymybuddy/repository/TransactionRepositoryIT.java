@@ -21,7 +21,7 @@ public class TransactionRepositoryIT {
         Long receiverId = list.getFirst().getReceiver().getId();
         String description = list.getFirst().getDescription();
         Assertions.assertEquals(1,receiverId);
-        Assertions.assertEquals("Reimbursement",description);
+        Assertions.assertEquals("Payment for services",description);
     }
     @Test
     void testConnexionByFindBySenderIdNorFound(){

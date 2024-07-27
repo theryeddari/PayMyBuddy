@@ -2,11 +2,18 @@ package com.thery.paymybuddy.Services;
 
 import com.thery.paymybuddy.dto.DoTransferRequest;
 import com.thery.paymybuddy.dto.DoTransferResponse;
+import com.thery.paymybuddy.dto.TransferredGeneralDetailDTO;
 import com.thery.paymybuddy.dto.TransferredGeneralDetailResponse;
+import com.thery.paymybuddy.models.Transaction;
 import com.thery.paymybuddy.repository.TransactionRepository;
+import com.thery.paymybuddy.utils.InformationOnContextUtils;
+import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.thery.paymybuddy.Exceptions.TransactionServiceException.*;
 
@@ -35,10 +42,15 @@ public class TransactionService {
      * @return TransferredGeneralDetailSuccessDTO containing the general transfer details
      * @throws GetGeneralTransferDetailException if an error occurs while retrieving the details
      */
+    @Transactional
     public TransferredGeneralDetailResponse getGeneralTransferDetail() throws GetGeneralTransferDetailException {
         try {
+            long clientId = Long.parseLong(InformationOnContextUtils.getIdClientFromContext());
+            List<Transaction> transactionsList = transactionRepository.findBySender_Id(clientId);
+            List<TransferredGeneralDetailDTO> transferredGeneralDetailDTOList = new ArrayList<>();
+            transactionsList.forEach(transaction -> transferredGeneralDetailDTOList.add(new TransferredGeneralDetailDTO(transaction.getReceiver().getEmail(),transaction.getDescription(),transaction.getAmount())));
             logger.info("Retrieving general transfer details.");
-            return new TransferredGeneralDetailResponse();
+            return new TransferredGeneralDetailResponse(transferredGeneralDetailDTOList);
         } catch (Exception e) {
             logger.error("Error while retrieving general transfer details.", e);
             throw new GetGeneralTransferDetailException(e);
@@ -52,6 +64,7 @@ public class TransactionService {
      * @return TransferringSuccessDTO containing the result of the transfer
      * @throws DoTransferException if an error occurs during the transfer
      */
+    @Transactional
     public DoTransferResponse doTransfer(DoTransferRequest doTransferRequest) throws DoTransferException {
         try {
             logger.info("Performing transfer with details: {}", doTransferRequest);

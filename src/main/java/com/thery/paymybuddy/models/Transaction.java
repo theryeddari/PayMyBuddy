@@ -32,14 +32,14 @@ public class Transaction {
     /**
      * The client who initiated (sent) the transaction.
      */
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "sender", nullable = false)
     private Client sender;
 
     /**
      * The client who received the transaction.
      */
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "receiver", nullable = false)
     private Client receiver;
 

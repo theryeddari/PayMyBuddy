@@ -4,6 +4,7 @@ import com.thery.paymybuddy.Services.TransactionService;
 import com.thery.paymybuddy.controller.TransactionController;
 import com.thery.paymybuddy.dto.DoTransferRequest;
 import com.thery.paymybuddy.dto.DoTransferResponse;
+import com.thery.paymybuddy.dto.TransferredGeneralDetailDTO;
 import com.thery.paymybuddy.dto.TransferredGeneralDetailResponse;
 
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,14 +32,16 @@ public class TransactionControllerTest {
 
     @Test
     void getGeneralTransferDetail_success() throws Exception {
-        TransferredGeneralDetailResponse transferredGeneralDetailResponse = new TransferredGeneralDetailResponse(/* Add necessary details here */);
+        TransferredGeneralDetailDTO transferredGeneralDetailDTO = new TransferredGeneralDetailDTO("test@example.com", "description test", 10.0);
+        List<TransferredGeneralDetailDTO> transferredGeneralDetailDTOList = List.of(transferredGeneralDetailDTO);
+        TransferredGeneralDetailResponse transferredGeneralDetailResponse = new TransferredGeneralDetailResponse(transferredGeneralDetailDTOList);
 
         when(transactionService.getGeneralTransferDetail()).thenReturn(transferredGeneralDetailResponse);
 
         TransferredGeneralDetailResponse result = transactionController.getGeneralTransferDetail();
 
-        assertEquals(transferredGeneralDetailResponse, result);
         verify(transactionService).getGeneralTransferDetail();
+        assertEquals(transferredGeneralDetailResponse, result);
     }
 
     @Test

@@ -21,13 +21,12 @@ VALUES ('alice', 'alice@example.com', '$2a$10$Le3U7eRFQO7.a5sZa3m3quHL5GjFcfpQKh
 
 -- Insertion des connexions d'amis
 INSERT INTO ClientRelationships (client_id, friend_id)
-VALUES (1, 2),
+VALUES (2, 1),
        (1, 3),
-       (1, 4);
+       (2, 4);
 
 -- Insertion des transactions
 INSERT INTO Transaction (description, amount, sender, receiver)
-VALUES ('Payment for services', 100.00, 1, 2),
-       ('Reimbursement', 50.00, 2, 1),
-       ('Gift', 200.00, 3, 1),
-       ('Refund', 75.00, 1, 4);
+VALUES ('Payment for services', 20.00, 2, 1),
+       ('Birthday', 30.00, 2, 4),
+       ('Reimbursement', 20.00, 1, 3);

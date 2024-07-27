@@ -10,11 +10,13 @@ import com.thery.paymybuddy.utils.InformationOnContextUtils;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 import static com.thery.paymybuddy.Exceptions.ClientServiceException.*;
+import static com.thery.paymybuddy.constants.MessagesServicesConstants.*;
 
 /**
  * Service class for handling client operations.
@@ -26,19 +28,22 @@ public class ClientService {
 
     private final ClientRepository clientRepository;
 
+    private final PasswordEncoder clientPasswordEncoder;
     /**
      * Constructor for ClientService.
      *
      * @param clientRepository the client repository
+     * @param clientPasswordEncoder Encoder for client passwords.
      */
-    public ClientService(ClientRepository clientRepository) {
+    public ClientService(ClientRepository clientRepository, PasswordEncoder clientPasswordEncoder) {
         this.clientRepository = clientRepository;
+        this.clientPasswordEncoder = clientPasswordEncoder;
     }
 
     /**
      * Retrieves the profile of the client.
      *
-     * @return the profile client DTO
+     * @return  the profile client DTO
      * @throws GetProfileException if an error occurs while getting the profile
      */
     @Transactional
@@ -65,7 +70,19 @@ public class ClientService {
     public ProfileClientChangeResponse changeProfile(ProfileClientChangeRequest profileClientChangeRequest) throws ChangeProfileException {
         logger.info("Attempting to change client profile.");
         try {
-            return new ProfileClientChangeResponse();
+            long clientId = Long.parseLong(InformationOnContextUtils.getIdClientFromContext());
+            Client client = findById(clientId);
+            if(!profileClientChangeRequest.getUsername().isEmpty()){
+                client.setUsername(profileClientChangeRequest.getUsername());
+            }
+            if(!profileClientChangeRequest.getEmail().isEmpty()){
+                client.setEmail(profileClientChangeRequest.getEmail());
+            }
+            if(!profileClientChangeRequest.getPassword().isEmpty()){
+                client.setPassword(clientPasswordEncoder.encode(profileClientChangeRequest.getPassword()));
+            }
+            clientRepository.save(client);
+            return new ProfileClientChangeResponse(CHANGE_PROFILE_SUCCESS);
         } catch (Exception e) {
             logger.error("Error while changing client profile: {}", e.getMessage());
             throw new ChangeProfileException(e);

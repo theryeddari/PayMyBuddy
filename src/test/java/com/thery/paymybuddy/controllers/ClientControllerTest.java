@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.thery.paymybuddy.constants.MessagesServicesConstants.CHANGE_PROFILE_SUCCESS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -44,14 +45,15 @@ class ClientControllerTest {
     @Test
     void changeProfile_success() throws Exception {
         ProfileClientChangeRequest profileClientChangeRequest = new ProfileClientChangeRequest("Alice", "alice@gmail.com","alicep");
-        ProfileClientChangeResponse profileClientChangeResponse = new ProfileClientChangeResponse("Profile successful changed");
+        ProfileClientChangeResponse profileClientChangeResponse = new ProfileClientChangeResponse(CHANGE_PROFILE_SUCCESS);
 
         when(clientService.changeProfile(any(ProfileClientChangeRequest.class))).thenReturn(profileClientChangeResponse);
 
         ProfileClientChangeResponse result = clientController.changeProfile(profileClientChangeRequest);
 
         assertEquals(profileClientChangeResponse, result);
-        verify(clientService).changeProfile(any(ProfileClientChangeRequest.class));
+        verify(clientService).changeProfile(profileClientChangeRequest);
+        assertEquals(profileClientChangeResponse, result);
     }
 
     @Test

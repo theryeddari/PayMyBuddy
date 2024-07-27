@@ -12,6 +12,10 @@ public class MessagesServicesConstants {
         //relationships service
         public static final String ADD_RELATION_SUCCESS = "Felicitation, you're added friend";
 
+        //client service
+        public static final String CHANGE_PROFILE_SUCCESS = "Felicitation, your profile has been changed";
+
+
         // Add more message constants as needed
 
 }

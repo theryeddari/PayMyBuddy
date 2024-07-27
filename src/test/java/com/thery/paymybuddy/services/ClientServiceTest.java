@@ -1,10 +1,12 @@
 package com.thery.paymybuddy.services;
 
 import static com.thery.paymybuddy.Exceptions.ClientServiceException.*;
+import static com.thery.paymybuddy.constants.MessagesServicesConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+import com.thery.paymybuddy.Exceptions.InformationOnContextUtilsException.GetIdClientFromContextException;
 import com.thery.paymybuddy.Services.ClientService;
 import com.thery.paymybuddy.dto.ProfileClientChangeRequest;
 import com.thery.paymybuddy.dto.ProfileClientChangeResponse;
@@ -13,12 +15,14 @@ import com.thery.paymybuddy.dto.SavingClientResponse;
 import com.thery.paymybuddy.models.Client;
 import com.thery.paymybuddy.repository.ClientRepository;
 import com.thery.paymybuddy.utils.InformationOnContextUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -27,6 +31,9 @@ public class ClientServiceTest {
 
     @Mock
     private ClientRepository clientRepository;
+
+    @Mock
+    private PasswordEncoder clientPasswordEncoder;
 
     @InjectMocks
     private ClientService clientService;
@@ -66,20 +73,64 @@ public class ClientServiceTest {
     }
 
     @Test
-    public void testChangeProfile_Success() throws ChangeProfileException {
+    public void testChangeProfile_WithoutPasswordAndEmailModification_Success() throws ChangeProfileException {
+        ProfileClientChangeRequest profileClientChangeRequest = new ProfileClientChangeRequest("robert","","");
+
+        Client client = mock(Client.class);
+        client.setEmail("test@example.com");
+
         try (MockedStatic<InformationOnContextUtils> informationOnContextUtilsMockedStatic = mockStatic(InformationOnContextUtils.class)) {
             // Mock the static method
             informationOnContextUtilsMockedStatic.when(InformationOnContextUtils::getIdClientFromContext).thenReturn("1");
-            ProfileClientChangeRequest profileClientChangeRequest = new ProfileClientChangeRequest("robert","alice.robert@gmail.com","robertp");
+
+            when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
+            when(clientRepository.save(any(Client.class))).thenReturn(new Client());
 
             ProfileClientChangeResponse profileClientChangeResponse = clientService.changeProfile(profileClientChangeRequest);
+
+            informationOnContextUtilsMockedStatic.verify(InformationOnContextUtils::getIdClientFromContext, times(1));
+
+            verify(client).setUsername(profileClientChangeRequest.getUsername());
+            verify(client, never()).setEmail(profileClientChangeRequest.getEmail());
+            verify(client, never()).setPassword(clientPasswordEncoder.encode(profileClientChangeRequest.getPassword()));
+
+            Assertions.assertEquals(CHANGE_PROFILE_SUCCESS,profileClientChangeResponse.getMessageSuccess() );
         }
     }
 
     @Test
-    public void testChangeProfile_Exception() throws ChangeProfileException {
-        ProfileClientChangeRequest profileClientChangeRequest = new ProfileClientChangeRequest();
-        assertThrows(ChangeProfileException.class, () -> clientService.changeProfile(profileClientChangeRequest));
+    public void testChangeProfile_WithPasswordModification_Success() throws ChangeProfileException {
+        ProfileClientChangeRequest profileClientChangeRequest = new ProfileClientChangeRequest("robert","alice.robert@gmail.com","robertp");
+
+        Client client = mock(Client.class);
+
+        try (MockedStatic<InformationOnContextUtils> informationOnContextUtilsMockedStatic = mockStatic(InformationOnContextUtils.class)) {
+            // Mock the static method
+            informationOnContextUtilsMockedStatic.when(InformationOnContextUtils::getIdClientFromContext).thenReturn("1");
+
+            when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
+            when(clientPasswordEncoder.encode(anyString())).thenReturn("hashedPassword");
+            when(clientRepository.save(any(Client.class))).thenReturn(new Client());
+
+            ProfileClientChangeResponse profileClientChangeResponse = clientService.changeProfile(profileClientChangeRequest);
+
+            informationOnContextUtilsMockedStatic.verify(InformationOnContextUtils::getIdClientFromContext, times(1));
+
+            verify(client).setUsername(profileClientChangeRequest.getUsername());
+            verify(client).setEmail(profileClientChangeRequest.getEmail());
+            verify(client).setPassword(clientPasswordEncoder.encode(profileClientChangeRequest.getPassword()));
+            Assertions.assertEquals(CHANGE_PROFILE_SUCCESS,profileClientChangeResponse.getMessageSuccess() );
+        }
+    }
+    @Test
+    public void testChangeProfile_Exception() {
+        try (MockedStatic<InformationOnContextUtils> informationOnContextUtilsMockedStatic = mockStatic(InformationOnContextUtils.class)) {
+            // Mock the static method
+            informationOnContextUtilsMockedStatic.when(InformationOnContextUtils::getIdClientFromContext).thenThrow(GetIdClientFromContextException.class);
+
+            Exception exception = assertThrows(ChangeProfileException.class, () -> clientService.changeProfile(new ProfileClientChangeRequest()));
+            assertEquals(GetIdClientFromContextException.class, exception.getCause().getClass());
+        }
     }
 
     @Test

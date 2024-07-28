@@ -63,19 +63,33 @@ public class TransactionServiceException extends Exception {
     public static class isFundAvailableException extends TransactionServiceException {
 
         /**
-         * Constructs a new TransactionServiceException with the specified detail message and cause.
+         * Constructs a new TransactionServiceException with the specified detail message.
          */
         public isFundAvailableException() {
             super(MessageExceptionConstants.IS_FUND_AVAILABLE_EXCEPTION);
         }
     }
 
+    /**
+     * Exception class for errors occurring during the execution of a transfer because for transferring fund you need to be friend with the receiver .
+     */
     public static class isTransactionBetweenFriendException extends TransactionServiceException {
         /**
-         * Constructs a new isTransactionBetweenFriendException with the specified detail message and cause.
+         * Constructs a new isTransactionBetweenFriendException with the specified detail message.
          */
         public isTransactionBetweenFriendException() {
             super(MessageExceptionConstants.IS_TRANSACTION_BETWEEN_FRIEND_EXCEPTION);
+        }
+    }
+    /**
+     * Exception class for errors occurring during the aggregation of necessary information that client need to start transfer
+     */
+    public static class AggregationNecessaryInfoForTransferResponseException extends TransactionServiceException {
+        /**
+         * Constructs a new AggregationNecessaryInfoForTransferResponseException with the specified detail message.
+         */
+        public AggregationNecessaryInfoForTransferResponseException() {
+            super(MessageExceptionConstants.AGGREGATION_NECESSARY_INFO_FOR_TRANSFER_RESPONSE_EXCEPTION);
         }
     }
 

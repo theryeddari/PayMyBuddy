@@ -52,4 +52,14 @@ public class TransactionControllerAdviceTest {
         assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
         assertEquals(DO_TRANSFER_EXCEPTION + MORE_INFO + IS_TRANSACTION_BETWEEN_FRIEND_EXCEPTION , response.getBody());
     }
+
+    @Test
+    public void testHandleAggregationNecessaryInfoForTransferException() {
+        AggregationNecessaryInfoForTransferResponseException ex = new AggregationNecessaryInfoForTransferResponseException();
+
+        ResponseEntity<String> response = advice.HandleAggregationNecessaryInfoForTransferException(ex);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals( AGGREGATION_NECESSARY_INFO_FOR_TRANSFER_RESPONSE_EXCEPTION , response.getBody());
+    }
 }

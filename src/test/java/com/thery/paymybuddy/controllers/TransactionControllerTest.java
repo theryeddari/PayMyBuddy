@@ -1,12 +1,10 @@
 package com.thery.paymybuddy.controllers;
 
+import com.thery.paymybuddy.Exceptions.TransactionServiceException;
 import com.thery.paymybuddy.Services.TransactionService;
 import com.thery.paymybuddy.constants.MessagesServicesConstants;
 import com.thery.paymybuddy.controller.TransactionController;
-import com.thery.paymybuddy.dto.DoTransferRequest;
-import com.thery.paymybuddy.dto.DoTransferResponse;
-import com.thery.paymybuddy.dto.TransferredGeneralDetailDTO;
-import com.thery.paymybuddy.dto.TransferredGeneralDetailResponse;
+import com.thery.paymybuddy.dto.*;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -55,7 +53,25 @@ public class TransactionControllerTest {
 
         DoTransferResponse result = transactionController.doTransfer(doTransferRequest);
 
-        assertEquals(doTransferResponseExcepted, result);
         verify(transactionService).doTransfer(any(DoTransferRequest.class));
+        assertEquals(doTransferResponseExcepted, result);
+    }
+
+    @Test
+    public void testAggregationNecessaryInfoForTransfer() throws TransactionServiceException.AggregationNecessaryInfoForTransferResponseException {
+        SavingClientResponse savingClientResponse = new SavingClientResponse(100.00);
+        List<String> emailFriendList = List.of("test@example.com");
+        RelationShipsDetailForTransferResponse relationShipsDetailForTransferResponse = new RelationShipsDetailForTransferResponse(emailFriendList);
+        TransferredGeneralDetailDTO transferredGeneralDetailDTO = new TransferredGeneralDetailDTO("test@example.com", "description test", 10.0);
+        List<TransferredGeneralDetailDTO> transferredGeneralDetailDTOList = List.of(transferredGeneralDetailDTO);
+        TransferredGeneralDetailResponse transferredGeneralDetailResponse = new TransferredGeneralDetailResponse(transferredGeneralDetailDTOList);
+        AggregationNecessaryInfoForTransferResponse aggregationNecessaryInfoForTransferResponseExcepted = new AggregationNecessaryInfoForTransferResponse(transferredGeneralDetailResponse, relationShipsDetailForTransferResponse, savingClientResponse);
+
+        when(transactionService.aggregationNecessaryInfoForTransfer()).thenReturn(aggregationNecessaryInfoForTransferResponseExcepted);
+
+        AggregationNecessaryInfoForTransferResponse aggregationNecessaryInfoForTransferResponse = transactionController.aggregationNecessaryInfoForTransfer();
+
+        verify(transactionService).aggregationNecessaryInfoForTransfer();
+        assertEquals(aggregationNecessaryInfoForTransferResponseExcepted, aggregationNecessaryInfoForTransferResponse);
     }
 }

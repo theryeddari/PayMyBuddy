@@ -48,4 +48,9 @@ public class TransactionControllerAdvice {
         }
         return new ResponseEntity<>(DO_TRANSFER_EXCEPTION, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    @ExceptionHandler(AggregationNecessaryInfoForTransferResponseException.class)
+    public ResponseEntity<String> HandleAggregationNecessaryInfoForTransferException(AggregationNecessaryInfoForTransferResponseException ex) {
+        logger.error("{}", ex.getMessage());
+        return new ResponseEntity<>(AGGREGATION_NECESSARY_INFO_FOR_TRANSFER_RESPONSE_EXCEPTION, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

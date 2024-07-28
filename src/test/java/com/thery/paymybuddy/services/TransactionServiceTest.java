@@ -7,6 +7,8 @@ import static com.thery.paymybuddy.constants.MessageExceptionConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thery.paymybuddy.Exceptions.RelationShipsServiceException;
 import com.thery.paymybuddy.Services.ClientService;
 import com.thery.paymybuddy.Services.RelationShipsService;
@@ -173,4 +175,56 @@ public class TransactionServiceTest {
             assertEquals(IS_TRANSACTION_BETWEEN_FRIEND_EXCEPTION, exception.getCause().getMessage());
         }
     }
+    @Test
+    public void testAggregationNecessaryInfoForTransfer() throws GetSavingClientException, RelationShipsServiceException.RelationShipsDetailForTransferException, JsonProcessingException, AggregationNecessaryInfoForTransferResponseException {
+        SavingClientResponse savingClientResponse = new SavingClientResponse(100.00);
+        List<String> emailFriendList = List.of("test@example.com");
+        RelationShipsDetailForTransferResponse relationShipsDetailForTransferResponse = new RelationShipsDetailForTransferResponse(emailFriendList);
+        TransferredGeneralDetailDTO transferredGeneralDetailDTO= new  TransferredGeneralDetailDTO("test@example.com", "description test", 10.0);
+        List<TransferredGeneralDetailDTO> transferredGeneralDetailDTOList = List.of(transferredGeneralDetailDTO);
+        TransferredGeneralDetailResponse transferredGeneralDetailResponse = new TransferredGeneralDetailResponse(transferredGeneralDetailDTOList);
+        AggregationNecessaryInfoForTransferResponse aggregationNecessaryInfoForTransferResponseExcepted = new AggregationNecessaryInfoForTransferResponse(transferredGeneralDetailResponse, relationShipsDetailForTransferResponse, savingClientResponse);
+
+        try (MockedStatic<InformationOnContextUtils> informationOnContextUtilsMockedStatic = mockStatic(InformationOnContextUtils.class)) {
+            // Mock the static method
+            informationOnContextUtilsMockedStatic.when(InformationOnContextUtils::getIdClientFromContext).thenReturn("1");
+
+            //stub necessary service and method
+            when(clientService.getSavingClient()).thenReturn(savingClientResponse);
+            when(relationShipsService.relationShipsDetailForTransfer()).thenReturn(relationShipsDetailForTransferResponse);
+
+            //Concerning the method which allows me to retrieve "transferredGeneralDetailResponse",
+            // being itself a method of the service tested, I cannot mock it, so I simulate its operation as if
+            // the logic was in this method tested
+            Transaction transaction = mock(Transaction.class);
+            List<Transaction> transactionList = List.of(transaction);
+
+            when(transactionRepository.findBySender_Id(1L)).thenReturn(transactionList);
+
+            Client client = mock(Client.class);
+            when(transaction.getReceiver()).thenReturn(client);
+            when(client.getEmail()).thenReturn("test@example.com");
+            when(transaction.getAmount()).thenReturn(10.0);
+            when(transaction.getDescription()).thenReturn("description test");
+
+            AggregationNecessaryInfoForTransferResponse aggregationNecessaryInfoForTransferResponse = transactionService.aggregationNecessaryInfoForTransfer();
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            assertEquals(objectMapper.writeValueAsString(aggregationNecessaryInfoForTransferResponseExcepted), objectMapper.writeValueAsString(aggregationNecessaryInfoForTransferResponse));
+        }
+    }
+
+    @Test
+    public void testAggregationNecessaryInfoForTransfer_Exception() throws GetSavingClientException {
+
+        try (MockedStatic<InformationOnContextUtils> informationOnContextUtilsMockedStatic = mockStatic(InformationOnContextUtils.class)) {
+            // Mock the static method
+            informationOnContextUtilsMockedStatic.when(InformationOnContextUtils::getIdClientFromContext).thenReturn("1");
+
+            when(clientService.getSavingClient()).thenThrow(new RuntimeException());
+
+            assertThrows(AggregationNecessaryInfoForTransferResponseException.class, () -> transactionService.aggregationNecessaryInfoForTransfer());
+        }
+    }
+
 }

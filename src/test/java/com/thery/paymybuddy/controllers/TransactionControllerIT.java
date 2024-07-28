@@ -46,8 +46,6 @@ public class TransactionControllerIT {
 
     String jwtTokenBob;
 
-    String jwtTokenUnknownAuthenticated;
-
 
     @BeforeEach
     public void setUp() throws GenerateTokenConfigExceptionClient {
@@ -58,9 +56,6 @@ public class TransactionControllerIT {
         Collection<? extends GrantedAuthority> authorities = Set.of(new SimpleGrantedAuthority("ROLE_CLIENT"));
         doReturn(authorities).when(authentication).getAuthorities();
         jwtTokenBob = jwtClientServiceConfig.generateToken(authentication);
-        when(authentication.getName()).thenReturn("10");
-        jwtTokenUnknownAuthenticated = jwtClientServiceConfig.generateToken(authentication);
-
     }
 
     @Test
@@ -78,7 +73,7 @@ public class TransactionControllerIT {
     }
     @Test
     public void testGetTransferredGeneralDetail_Failed() throws Exception {
-        when(transactionRepository.findBySender_Id(anyLong())).thenThrow(new RuntimeException("Test Exception response"));
+        when(transactionRepository.findBySender_Id(anyLong())).thenThrow(new RuntimeException());
 
         mockMvc.perform(get("/api/fr/client/dashboard/transaction")
                         .header("Authorization", "Bearer " + jwtTokenBob))
@@ -122,5 +117,36 @@ public class TransactionControllerIT {
                         .content(objectMapper.writeValueAsString(doTransferRequest)))
                 .andExpect(status().isForbidden())
                 .andExpect(content().string(DO_TRANSFER_EXCEPTION + MORE_INFO + IS_TRANSACTION_BETWEEN_FRIEND_EXCEPTION));
+    }
+
+    @Test
+    public void testAggregationNecessaryInfoForTransfer_Success() throws Exception {
+        SavingClientResponse savingClientResponse = new SavingClientResponse(100.00);
+
+        List<String> emailFriendList = List.of("alice@example.com", "dave@example.com");
+        RelationShipsDetailForTransferResponse relationShipsDetailForTransferResponse = new RelationShipsDetailForTransferResponse(emailFriendList);
+
+        TransferredGeneralDetailDTO transferredGeneralDetailDTO1 = new TransferredGeneralDetailDTO("alice@example.com", "Payment for services", 20.0);
+        TransferredGeneralDetailDTO transferredGeneralDetailDTO2 = new TransferredGeneralDetailDTO("dave@example.com", "Birthday", 30.0);
+        List<TransferredGeneralDetailDTO> transferredGeneralDetailDTOList = List.of(transferredGeneralDetailDTO1, transferredGeneralDetailDTO2);
+        TransferredGeneralDetailResponse transferredGeneralDetailResponse = new TransferredGeneralDetailResponse(transferredGeneralDetailDTOList);
+
+        AggregationNecessaryInfoForTransferResponse aggregationNecessaryInfoForTransferResponseExcepted = new AggregationNecessaryInfoForTransferResponse(transferredGeneralDetailResponse, relationShipsDetailForTransferResponse, savingClientResponse);
+
+
+        mockMvc.perform(get("/api/fr/client/dashboard/transfer")
+                        .header("Authorization", "Bearer " + jwtTokenBob))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(aggregationNecessaryInfoForTransferResponseExcepted)));
+    }
+
+    @Test
+    public void testAggregationNecessaryInfoForTransfer_Failed() throws Exception {
+        when(transactionRepository.findBySender_Id(anyLong())).thenThrow(new RuntimeException());
+
+        mockMvc.perform(get("/api/fr/client/dashboard/transfer")
+                        .header("Authorization", "Bearer " + jwtTokenBob))
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().string(AGGREGATION_NECESSARY_INFO_FOR_TRANSFER_RESPONSE_EXCEPTION));
     }
 }

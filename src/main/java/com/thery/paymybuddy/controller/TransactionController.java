@@ -1,6 +1,7 @@
 package com.thery.paymybuddy.controller;
 
 import com.thery.paymybuddy.Services.TransactionService;
+import com.thery.paymybuddy.dto.AggregationNecessaryInfoForTransferResponse;
 import com.thery.paymybuddy.dto.DoTransferRequest;
 import com.thery.paymybuddy.dto.DoTransferResponse;
 import com.thery.paymybuddy.dto.TransferredGeneralDetailResponse;
@@ -51,5 +52,14 @@ public class TransactionController {
         DoTransferResponse transferResult = transactionService.doTransfer(detailOnTransferDTO);
         logger.info("Transfer completed successfully");
         return transferResult;
+    }
+
+    @GetMapping("/transfer")
+    @ResponseStatus(HttpStatus.OK)
+    public AggregationNecessaryInfoForTransferResponse aggregationNecessaryInfoForTransfer() throws AggregationNecessaryInfoForTransferResponseException {
+        logger.info("Fetching necessary info");
+        AggregationNecessaryInfoForTransferResponse aggregationNecessaryInfoForTransferResponse = transactionService.aggregationNecessaryInfoForTransfer();
+        logger.info("Return necessary info successfully");
+        return aggregationNecessaryInfoForTransferResponse;
     }
 }

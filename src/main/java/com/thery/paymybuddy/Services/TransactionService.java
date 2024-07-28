@@ -1,10 +1,7 @@
 package com.thery.paymybuddy.Services;
 
 import com.thery.paymybuddy.Exceptions.RelationShipsServiceException;
-import com.thery.paymybuddy.dto.DoTransferRequest;
-import com.thery.paymybuddy.dto.DoTransferResponse;
-import com.thery.paymybuddy.dto.TransferredGeneralDetailDTO;
-import com.thery.paymybuddy.dto.TransferredGeneralDetailResponse;
+import com.thery.paymybuddy.dto.*;
 import com.thery.paymybuddy.models.Client;
 import com.thery.paymybuddy.models.Transaction;
 import com.thery.paymybuddy.repository.TransactionRepository;
@@ -113,4 +110,16 @@ public class TransactionService {
         }
     }
 
+    @Transactional
+    public AggregationNecessaryInfoForTransferResponse aggregationNecessaryInfoForTransfer() throws AggregationNecessaryInfoForTransferResponseException {
+        try {
+            SavingClientResponse savingClientResponse = clientService.getSavingClient();
+            RelationShipsDetailForTransferResponse relationShipsDetailForTransferResponse = relationshipsService.relationShipsDetailForTransfer();
+            TransferredGeneralDetailResponse transferredGeneralDetailResponse = getTransferredGeneralDetail();
+
+            return new AggregationNecessaryInfoForTransferResponse(transferredGeneralDetailResponse, relationShipsDetailForTransferResponse, savingClientResponse);
+        } catch (Exception e) {
+            throw new AggregationNecessaryInfoForTransferResponseException();
+        }
+    }
 }

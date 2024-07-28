@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import static com.thery.paymybuddy.Exceptions.AuthenticationManagementServiceException.*;
-import static com.thery.paymybuddy.Exceptions.ClientServiceException.*;
-import static com.thery.paymybuddy.constants.MessageExceptionConstants.*;
+import static com.thery.paymybuddy.exception.AuthenticationManagementServiceException.*;
+import static com.thery.paymybuddy.exception.ClientServiceException.*;
+import static com.thery.paymybuddy.constant.MessageExceptionConstants.*;
 
 /**
  * Controller advice to handle exceptions thrown by AuthenticationManagementController.

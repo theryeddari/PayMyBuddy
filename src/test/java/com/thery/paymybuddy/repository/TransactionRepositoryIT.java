@@ -1,6 +1,6 @@
 package com.thery.paymybuddy.repository;
 
-import com.thery.paymybuddy.models.Transaction;
+import com.thery.paymybuddy.model.Transaction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class TransactionRepositoryIT {
         Long receiverId = list.getFirst().getReceiver().getId();
         String description = list.getFirst().getDescription();
         Assertions.assertEquals(1,receiverId);
-        Assertions.assertEquals("Payment for services",description);
+        Assertions.assertEquals("Payment for service",description);
     }
     @Test
     void testConnexionByFindBySenderIdNorFound(){

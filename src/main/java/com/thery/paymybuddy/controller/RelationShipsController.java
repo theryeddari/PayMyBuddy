@@ -4,7 +4,7 @@
  */
 package com.thery.paymybuddy.controller;
 
-import com.thery.paymybuddy.Services.RelationShipsService;
+import com.thery.paymybuddy.service.RelationShipsService;
 import com.thery.paymybuddy.dto.AddRelationShipsRequest;
 import com.thery.paymybuddy.dto.AddRelationShipsResponse;
 import com.thery.paymybuddy.dto.RelationShipsDetailForTransferResponse;
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import static com.thery.paymybuddy.Exceptions.RelationShipsServiceException.*;
+import static com.thery.paymybuddy.exception.RelationShipsServiceException.*;
 
 /**
  * REST controller for managing relationships between clients in the dashboard.

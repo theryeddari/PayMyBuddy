@@ -1,7 +1,7 @@
 package com.thery.paymybuddy.configs.security;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
-import com.thery.paymybuddy.models.Client;
+import com.thery.paymybuddy.model.Client;
 import com.thery.paymybuddy.repository.ClientRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

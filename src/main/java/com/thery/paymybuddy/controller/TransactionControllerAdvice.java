@@ -7,8 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import static com.thery.paymybuddy.Exceptions.TransactionServiceException.*;
-import static com.thery.paymybuddy.constants.MessageExceptionConstants.*;
+import static com.thery.paymybuddy.exception.TransactionServiceException.*;
+import static com.thery.paymybuddy.constant.MessageExceptionConstants.*;
 
 
 /**

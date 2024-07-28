@@ -1,7 +1,7 @@
 package com.thery.paymybuddy.repository;
 
-import com.thery.paymybuddy.models.ClientRelationships;
-import com.thery.paymybuddy.models.ClientRelationshipsPrimaryKeyComposite;
+import com.thery.paymybuddy.model.ClientRelationships;
+import com.thery.paymybuddy.model.ClientRelationshipsPrimaryKeyComposite;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

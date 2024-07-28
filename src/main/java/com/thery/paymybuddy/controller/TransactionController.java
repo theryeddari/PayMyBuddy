@@ -1,6 +1,6 @@
 package com.thery.paymybuddy.controller;
 
-import com.thery.paymybuddy.Services.TransactionService;
+import com.thery.paymybuddy.service.TransactionService;
 import com.thery.paymybuddy.dto.AggregationNecessaryInfoForTransferResponse;
 import com.thery.paymybuddy.dto.DoTransferRequest;
 import com.thery.paymybuddy.dto.DoTransferResponse;
@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import static com.thery.paymybuddy.Exceptions.TransactionServiceException.*;
+import static com.thery.paymybuddy.exception.TransactionServiceException.*;
 
 /**
  * Controller class for managing transfer operations.

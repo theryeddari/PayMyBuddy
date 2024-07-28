@@ -1,6 +1,6 @@
 package com.thery.paymybuddy.controller;
 
-import com.thery.paymybuddy.Services.ClientService;
+import com.thery.paymybuddy.service.ClientService;
 import com.thery.paymybuddy.dto.ProfileClientChangeResponse;
 import com.thery.paymybuddy.dto.ProfileClientChangeRequest;
 import com.thery.paymybuddy.dto.ProfileClientResponse;
@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import static com.thery.paymybuddy.Exceptions.ClientServiceException.*;
+import static com.thery.paymybuddy.exception.ClientServiceException.*;
 
 /**
  * Controller class for managing client dashboard APIs.

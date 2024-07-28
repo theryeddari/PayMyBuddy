@@ -27,6 +27,6 @@ VALUES (2, 1),
 
 -- Insertion des transactions
 INSERT INTO Transaction (description, amount, sender, receiver)
-VALUES ('Payment for services', 20.00, 2, 1),
+VALUES ('Payment for service', 20.00, 2, 1),
        ('Birthday', 30.00, 2, 4),
        ('Reimbursement', 20.00, 1, 3);

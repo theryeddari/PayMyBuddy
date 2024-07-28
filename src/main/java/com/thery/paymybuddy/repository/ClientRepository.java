@@ -1,6 +1,6 @@
 package com.thery.paymybuddy.repository;
 
-import com.thery.paymybuddy.models.Client;
+import com.thery.paymybuddy.model.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

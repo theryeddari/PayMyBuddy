@@ -7,13 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import static com.thery.paymybuddy.Exceptions.RelationShipsServiceException.*;
-import static com.thery.paymybuddy.Exceptions.RelationShipsServiceException.RelationshipsAlreadyExistException.*;
-import static com.thery.paymybuddy.constants.MessageExceptionConstants.*;
+import static com.thery.paymybuddy.exception.RelationShipsServiceException.*;
+import static com.thery.paymybuddy.exception.RelationShipsServiceException.RelationshipsAlreadyExistException.*;
+import static com.thery.paymybuddy.constant.MessageExceptionConstants.*;
 
 
 /**
- * Global exception handler for Relationship related exceptions in controllers.
+ * Global exception handler for Relationship related exceptions in controller.
  */
 @ControllerAdvice
 public class RelationShipsControllerAdvice {

@@ -1,6 +1,6 @@
 package com.thery.paymybuddy.controller;
 
-import com.thery.paymybuddy.Services.AuthenticationManagementService;
+import com.thery.paymybuddy.service.AuthenticationManagementService;
 import com.thery.paymybuddy.dto.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.thery.paymybuddy.Exceptions.AuthenticationManagementServiceException.*;
+import static com.thery.paymybuddy.exception.AuthenticationManagementServiceException.*;
 
 /**
  * Controller class for managing authentication-related operations.

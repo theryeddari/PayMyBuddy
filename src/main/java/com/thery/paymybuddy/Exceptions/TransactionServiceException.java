@@ -20,14 +20,14 @@ public class TransactionServiceException extends Exception {
     /**
      * Exception class for errors occurring during retrieval of general transfer details.
      */
-    public static class GetGeneralTransferDetailException extends TransactionServiceException {
+    public static class GetTransferredGeneralDetailException extends TransactionServiceException {
 
         /**
-         * Constructs a new GetGeneralTransferDetailException with the specified cause.
+         * Constructs a new GetTransferredGeneralDetailException with the specified cause.
          *
          * @param cause The cause of this exception
          */
-        public GetGeneralTransferDetailException(Throwable cause) {
+        public GetTransferredGeneralDetailException(Throwable cause) {
             super(GET_GENERAL_TRANSFER_DETAIL_EXCEPTION + MORE_INFO + cause.getClass() + " " + cause.getMessage(), cause);
         }
     }

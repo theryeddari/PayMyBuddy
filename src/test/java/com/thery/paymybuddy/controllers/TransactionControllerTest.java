@@ -31,16 +31,16 @@ public class TransactionControllerTest {
     private TransactionService transactionService;
 
     @Test
-    void getGeneralTransferDetail_success() throws Exception {
+    void getTransferredGeneralDetail_success() throws Exception {
         TransferredGeneralDetailDTO transferredGeneralDetailDTO = new TransferredGeneralDetailDTO("test@example.com", "description test", 10.0);
         List<TransferredGeneralDetailDTO> transferredGeneralDetailDTOList = List.of(transferredGeneralDetailDTO);
         TransferredGeneralDetailResponse transferredGeneralDetailResponse = new TransferredGeneralDetailResponse(transferredGeneralDetailDTOList);
 
-        when(transactionService.getGeneralTransferDetail()).thenReturn(transferredGeneralDetailResponse);
+        when(transactionService.getTransferredGeneralDetail()).thenReturn(transferredGeneralDetailResponse);
 
-        TransferredGeneralDetailResponse result = transactionController.getGeneralTransferDetail();
+        TransferredGeneralDetailResponse result = transactionController.getTransferredGeneralDetail();
 
-        verify(transactionService).getGeneralTransferDetail();
+        verify(transactionService).getTransferredGeneralDetail();
         assertEquals(transferredGeneralDetailResponse, result);
     }
 

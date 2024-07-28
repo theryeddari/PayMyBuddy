@@ -20,13 +20,13 @@ public class TransactionControllerAdvice {
     private static final Logger logger = LogManager.getLogger(TransactionControllerAdvice.class);
 
     /**
-     * Handles GetGeneralTransferDetailException and returns an appropriate HTTP response.
+     * Handles GetTransferredGeneralDetailException and returns an appropriate HTTP response.
      *
      * @param ex The exception thrown
      * @return ResponseEntity containing the error message and HTTP status code
      */
-    @ExceptionHandler(GetGeneralTransferDetailException.class)
-    public ResponseEntity<String> handleGetGeneralTransferDetailException(GetGeneralTransferDetailException ex) {
+    @ExceptionHandler(GetTransferredGeneralDetailException.class)
+    public ResponseEntity<String> handleGetGeneralTransferDetailException(GetTransferredGeneralDetailException ex) {
         logger.error("{}", ex.getMessage());
         return new ResponseEntity<>(GET_GENERAL_TRANSFER_DETAIL_EXCEPTION, HttpStatus.INTERNAL_SERVER_ERROR);
     }

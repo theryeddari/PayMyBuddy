@@ -14,8 +14,8 @@ public class TransactionControllerAdviceTest {
     private final TransactionControllerAdvice advice = new TransactionControllerAdvice();
 
     @Test
-    public void testHandleGetGeneralTransferDetailException() {
-        GetGeneralTransferDetailException ex = new GetGeneralTransferDetailException(new RuntimeException());
+    public void testHandleGetTransferredGeneralDetailException() {
+        GetTransferredGeneralDetailException ex = new GetTransferredGeneralDetailException(new RuntimeException());
 
         ResponseEntity<String> response = advice.handleGetGeneralTransferDetailException(ex);
 

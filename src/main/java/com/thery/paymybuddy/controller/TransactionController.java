@@ -31,9 +31,9 @@ public class TransactionController {
      */
     @GetMapping("/transaction")
     @ResponseStatus(HttpStatus.OK)
-    public TransferredGeneralDetailResponse getGeneralTransferDetail() throws GetGeneralTransferDetailException {
+    public TransferredGeneralDetailResponse getTransferredGeneralDetail() throws GetTransferredGeneralDetailException {
         logger.info("Fetching general transfer detail");
-        TransferredGeneralDetailResponse transferDetail = transactionService.getGeneralTransferDetail();
+        TransferredGeneralDetailResponse transferDetail = transactionService.getTransferredGeneralDetail();
         logger.info("General transfer detail fetched successfully");
         return transferDetail;
     }

@@ -34,7 +34,7 @@ public class TransactionServiceTest {
     private TransactionService transactionService;
 
     @Test
-    public void testGetGeneralTransferDetail_Success() throws GetGeneralTransferDetailException {
+    public void testGetTransferredGeneralDetail_Success() throws GetTransferredGeneralDetailException {
         TransferredGeneralDetailDTO transferredGeneralDetailDTO = new TransferredGeneralDetailDTO("test@example.com", "description test", 10.0);
         List<TransferredGeneralDetailDTO> transferredGeneralDetailDTOList = List.of(transferredGeneralDetailDTO);
         TransferredGeneralDetailResponse transferredGeneralDetailResponse = new TransferredGeneralDetailResponse(transferredGeneralDetailDTOList);
@@ -55,7 +55,7 @@ public class TransactionServiceTest {
             when(transaction.getAmount()).thenReturn(10.0);
             when(transaction.getDescription()).thenReturn("description test");
 
-            TransferredGeneralDetailResponse result = transactionService.getGeneralTransferDetail();
+            TransferredGeneralDetailResponse result = transactionService.getTransferredGeneralDetail();
 
             assertEquals(transferredGeneralDetailResponse.getListTransferredSuccesses().size(), result.getListTransferredSuccesses().size());
             assertEquals(transferredGeneralDetailResponse.getListTransferredSuccesses().getFirst().getAmount(), result.getListTransferredSuccesses().getFirst().getAmount());
@@ -66,8 +66,8 @@ public class TransactionServiceTest {
     }
 
     @Test
-    public void testGetGeneralTransferDetail_Exception() {
-        Exception exception = assertThrows(GetGeneralTransferDetailException.class, () -> transactionService.getGeneralTransferDetail());
+    public void testGetTransferredGeneralDetail_Exception() {
+        Exception exception = assertThrows(GetTransferredGeneralDetailException.class, () -> transactionService.getTransferredGeneralDetail());
         assertEquals(GetIdClientFromContextException.class,exception.getCause().getClass());
     }
 

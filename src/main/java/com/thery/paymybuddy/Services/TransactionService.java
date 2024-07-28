@@ -40,10 +40,10 @@ public class TransactionService {
      * Retrieves general transfer details.
      *
      * @return TransferredGeneralDetailSuccessDTO containing the general transfer details
-     * @throws GetGeneralTransferDetailException if an error occurs while retrieving the details
+     * @throws GetTransferredGeneralDetailException if an error occurs while retrieving the details
      */
     @Transactional
-    public TransferredGeneralDetailResponse getGeneralTransferDetail() throws GetGeneralTransferDetailException {
+    public TransferredGeneralDetailResponse getTransferredGeneralDetail() throws GetTransferredGeneralDetailException {
         try {
             long clientId = Long.parseLong(InformationOnContextUtils.getIdClientFromContext());
             List<Transaction> transactionsList = transactionRepository.findBySender_Id(clientId);
@@ -53,7 +53,7 @@ public class TransactionService {
             return new TransferredGeneralDetailResponse(transferredGeneralDetailDTOList);
         } catch (Exception e) {
             logger.error("Error while retrieving general transfer details.", e);
-            throw new GetGeneralTransferDetailException(e);
+            throw new GetTransferredGeneralDetailException(e);
         }
     }
 

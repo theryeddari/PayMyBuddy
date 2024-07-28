@@ -61,7 +61,7 @@ public class TransactionControllerIT {
     }
 
     @Test
-    public void testGetGeneralTransferDetail_Success() throws Exception {
+    public void testGetTransferredGeneralDetail_Success() throws Exception {
         TransferredGeneralDetailDTO transferredGeneralDetailDTO1 = new TransferredGeneralDetailDTO("alice@example.com", "Payment for services", 20.00);
         TransferredGeneralDetailDTO transferredGeneralDetailDTO2 = new TransferredGeneralDetailDTO("dave@example.com", "Birthday", 30.00);
 
@@ -74,7 +74,7 @@ public class TransactionControllerIT {
                 .andExpect(content().json(objectMapper.writeValueAsString(transferredGeneralDetailResponse)));
     }
     @Test
-    public void testGetGeneralTransferDetail_Failed() throws Exception {
+    public void testGetTransferredGeneralDetail_Failed() throws Exception {
         when(transactionRepository.findBySender_Id(anyLong())).thenThrow(new RuntimeException("Test Exception response"));
 
         mockMvc.perform(get("/api/fr/client/dashboard/transaction")

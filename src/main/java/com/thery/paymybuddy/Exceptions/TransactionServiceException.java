@@ -1,5 +1,7 @@
 package com.thery.paymybuddy.Exceptions;
 
+import com.thery.paymybuddy.constants.MessageExceptionConstants;
+
 import static com.thery.paymybuddy.constants.MessageExceptionConstants.*;
 
 /**
@@ -15,6 +17,15 @@ public class TransactionServiceException extends Exception {
      */
     public TransactionServiceException(String message, Throwable cause) {
         super(message, cause);
+    }
+
+    /**
+     * Constructs a new TransactionServiceException with the specified detail message and cause.
+     *
+     * @param message The detail message (which is saved for later retrieval by the getMessage() method)
+     */
+    public TransactionServiceException(String message) {
+        super(message);
     }
 
     /**
@@ -44,6 +55,27 @@ public class TransactionServiceException extends Exception {
          */
         public DoTransferException(Throwable cause) {
             super(DO_TRANSFER_EXCEPTION + MORE_INFO + cause.getClass() + " " + cause.getMessage(), cause);
+        }
+    }
+    /**
+     * Exception class for errors occurring during the execution of a transfer operation with negative balance.
+     */
+    public static class isFundAvailableException extends TransactionServiceException {
+
+        /**
+         * Constructs a new TransactionServiceException with the specified detail message and cause.
+         */
+        public isFundAvailableException() {
+            super(MessageExceptionConstants.IS_FUND_AVAILABLE_EXCEPTION);
+        }
+    }
+
+    public static class isTransactionBetweenFriendException extends TransactionServiceException {
+        /**
+         * Constructs a new isTransactionBetweenFriendException with the specified detail message and cause.
+         */
+        public isTransactionBetweenFriendException() {
+            super(MessageExceptionConstants.IS_TRANSACTION_BETWEEN_FRIEND_EXCEPTION);
         }
     }
 

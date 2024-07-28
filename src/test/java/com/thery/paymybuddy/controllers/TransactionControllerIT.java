@@ -2,6 +2,7 @@ package com.thery.paymybuddy.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thery.paymybuddy.configs.security.JwtClientServiceConfig;
+import com.thery.paymybuddy.constants.MessagesServicesConstants;
 import com.thery.paymybuddy.dto.*;
 import com.thery.paymybuddy.repository.TransactionRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,6 +25,7 @@ import static com.thery.paymybuddy.Exceptions.JwtClientServiceConfigException.Ge
 import static com.thery.paymybuddy.constants.MessageExceptionConstants.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -83,4 +86,41 @@ public class TransactionControllerIT {
                 .andExpect(content().string(GET_GENERAL_TRANSFER_DETAIL_EXCEPTION));
     }
 
+    @Test
+    public void testDoTransfer_Success() throws Exception {
+        DoTransferRequest doTransferRequest = new DoTransferRequest("alice@example.com", "description test", 10.0);
+        DoTransferResponse doTransferResponseExcepted = new DoTransferResponse(MessagesServicesConstants.TRANSFER_SUCCESS);
+
+        mockMvc.perform(post("/api/fr/client/dashboard/transfer")
+                        .header("Authorization", "Bearer " + jwtTokenBob)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(doTransferRequest)))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(doTransferResponseExcepted)));
+    }
+
+    //not enough funds for the transfer
+    @Test
+    public void testDoTransfer_isFundAvailableException() throws Exception {
+        DoTransferRequest doTransferRequest = new DoTransferRequest("alice@example.com", "description test", 1000.0);
+
+        mockMvc.perform(post("/api/fr/client/dashboard/transfer")
+                        .header("Authorization", "Bearer " + jwtTokenBob)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(doTransferRequest)))
+                .andExpect(status().isPaymentRequired())
+                .andExpect(content().string(DO_TRANSFER_EXCEPTION + MORE_INFO + IS_FUND_AVAILABLE_EXCEPTION));
+    }
+    //try to transfer fund with somebody who is not in its relation
+    @Test
+    public void testDoTransfer_IsTransactionBetweenFriendException() throws Exception {
+        DoTransferRequest doTransferRequest = new DoTransferRequest("carol@example.com", "description test", 10.0);
+
+        mockMvc.perform(post("/api/fr/client/dashboard/transfer")
+                        .header("Authorization", "Bearer " + jwtTokenBob)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(doTransferRequest)))
+                .andExpect(status().isForbidden())
+                .andExpect(content().string(DO_TRANSFER_EXCEPTION + MORE_INFO + IS_TRANSACTION_BETWEEN_FRIEND_EXCEPTION));
+    }
 }

@@ -36,8 +36,9 @@ public class MessageExceptionConstants {
     // Transaction Exception messages
     public static final String GET_GENERAL_TRANSFER_DETAIL_EXCEPTION = "Error while getting history of all transaction detail about Client";
     public static final String DO_TRANSFER_EXCEPTION = "Error while doing transaction about Client, transaction canceled";
+    public static final String IS_FUND_AVAILABLE_EXCEPTION = "error while checking account balance";
+    public static final String IS_TRANSACTION_BETWEEN_FRIEND_EXCEPTION = "error transactions must be between active relation";
 
     // Utils Information On Context Exception messages
     public static final String GET_ID_CLIENT_FROM_CONTEXT_EXCEPTION = "Error when getting id from context";
-
 }

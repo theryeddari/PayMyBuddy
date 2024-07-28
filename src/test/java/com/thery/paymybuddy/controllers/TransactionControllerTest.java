@@ -1,6 +1,7 @@
 package com.thery.paymybuddy.controllers;
 
 import com.thery.paymybuddy.Services.TransactionService;
+import com.thery.paymybuddy.constants.MessagesServicesConstants;
 import com.thery.paymybuddy.controller.TransactionController;
 import com.thery.paymybuddy.dto.DoTransferRequest;
 import com.thery.paymybuddy.dto.DoTransferResponse;
@@ -46,14 +47,15 @@ public class TransactionControllerTest {
 
     @Test
     void doTransfer_success() throws Exception {
-        DoTransferRequest detailForTransferringDTO = new DoTransferRequest(/* Add necessary details here */);
-        DoTransferResponse doTransferResponse = new DoTransferResponse(/* Add necessary details here */);
+        DoTransferRequest doTransferRequest = new DoTransferRequest("test@example.com", "description test", 10.0);
+        DoTransferResponse doTransferResponseExcepted = new DoTransferResponse(MessagesServicesConstants.TRANSFER_SUCCESS);
 
-        when(transactionService.doTransfer(any(DoTransferRequest.class))).thenReturn(doTransferResponse);
 
-        DoTransferResponse result = transactionController.doTransfer(detailForTransferringDTO);
+        when(transactionService.doTransfer(any(DoTransferRequest.class))).thenReturn(doTransferResponseExcepted);
 
-        assertEquals(doTransferResponse, result);
+        DoTransferResponse result = transactionController.doTransfer(doTransferRequest);
+
+        assertEquals(doTransferResponseExcepted, result);
         verify(transactionService).doTransfer(any(DoTransferRequest.class));
     }
 }

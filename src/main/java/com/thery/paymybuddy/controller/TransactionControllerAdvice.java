@@ -40,6 +40,12 @@ public class TransactionControllerAdvice {
     @ExceptionHandler(DoTransferException.class)
     public ResponseEntity<String> handleDoTransferException(DoTransferException ex) {
         logger.error("{}", ex.getMessage());
+        if(ex.getCause() instanceof isFundAvailableException) {
+            return new ResponseEntity<>(DO_TRANSFER_EXCEPTION + MORE_INFO + IS_FUND_AVAILABLE_EXCEPTION, HttpStatus.PAYMENT_REQUIRED);
+        }
+        if(ex.getCause() instanceof isTransactionBetweenFriendException) {
+            return new ResponseEntity<>(DO_TRANSFER_EXCEPTION + MORE_INFO + IS_TRANSACTION_BETWEEN_FRIEND_EXCEPTION, HttpStatus.FORBIDDEN);
+        }
         return new ResponseEntity<>(DO_TRANSFER_EXCEPTION, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

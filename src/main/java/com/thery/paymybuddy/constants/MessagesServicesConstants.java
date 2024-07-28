@@ -15,7 +15,10 @@ public class MessagesServicesConstants {
         //client service
         public static final String CHANGE_PROFILE_SUCCESS = "Felicitation, your profile has been changed";
 
+        //Transaction service
+        public static final String TRANSFER_SUCCESS = "Felicitation, you're transferred successfully";
 
-        // Add more message constants as needed
+
+    // Add more message constants as needed
 
 }

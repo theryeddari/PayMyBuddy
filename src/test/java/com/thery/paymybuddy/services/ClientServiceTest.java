@@ -182,6 +182,14 @@ public class ClientServiceTest {
         boolean client = clientService.isExistClient(anyString());
         assertFalse(client);
     }
+
+    @Test
+    public void testIsExistClient_IsExistClientException() {
+        when(clientRepository.existsByEmail(anyString())).thenThrow(new RuntimeException());
+        assertThrows(IsExistClientException.class,() -> clientService.isExistClient(anyString()));
+    }
+
+
     @Test
     public void testSaveClient_Success() throws SaveClientException {
         Client client = new Client();

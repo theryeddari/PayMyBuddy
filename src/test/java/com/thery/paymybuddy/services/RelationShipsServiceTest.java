@@ -3,6 +3,7 @@ package com.thery.paymybuddy.services;
 import static com.thery.paymybuddy.Exceptions.ClientServiceException.*;
 import static com.thery.paymybuddy.Exceptions.InformationOnContextUtilsException.*;
 import static com.thery.paymybuddy.Exceptions.RelationShipsServiceException.*;
+import static com.thery.paymybuddy.Exceptions.RelationShipsServiceException.RelationshipsAlreadyExistException.*;
 import static com.thery.paymybuddy.constants.MessagesServicesConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -78,7 +79,7 @@ public class RelationShipsServiceTest {
 }
 
     @Test
-    public void testAddRelationShips_Exception() throws FindByEmailException {
+    public void testAddRelationShips_RelationshipsAlreadyExistException() throws FindByEmailException {
         AddRelationShipsRequest addRelationShipsRequest = new AddRelationShipsRequest("noclient@exemple.com");
         String clientId = "2";
 
@@ -86,11 +87,33 @@ public class RelationShipsServiceTest {
             // Mock the static method
             informationOnContextUtilsMockedStatic.when(InformationOnContextUtils::getIdClientFromContext).thenReturn(clientId);
 
-            FindByEmailException findByEmailException = new FindByEmailException(new RuntimeException());
-            when(clientService.findByEmail(addRelationShipsRequest.getEmail())).thenThrow(findByEmailException);
+//            FindByEmailException findByEmailException = new FindByEmailException(new RuntimeException());
+//            when(clientService.findByEmail(addRelationShipsRequest.getEmail())).thenThrow(findByEmailException);
+            when(clientRelationshipsRepository.existsClientRelationshipsByClient_idAndFriendEmail(anyLong(), anyString())).thenReturn(true);
 
             Exception exception = assertThrows(AddRelationShipsException.class, () -> relationShipsService.addRelationShips(addRelationShipsRequest));
-            assertEquals(FindByEmailException.class, exception.getCause().getClass());
+//            assertEquals(FindByEmailException.class, exception.getCause().getClass());
+            assertEquals(RelationshipsAlreadyExistException.class, exception.getCause().getClass());
+        }
+    }
+
+    @Test
+    public void testAddRelationShips_SelfOrientedRelationshipException() throws FindByEmailException {
+        AddRelationShipsRequest addRelationShipsRequest = new AddRelationShipsRequest("noclient@exemple.com");
+        String clientId = "2";
+
+        try (MockedStatic<InformationOnContextUtils> informationOnContextUtilsMockedStatic = mockStatic(InformationOnContextUtils.class)) {
+            // Mock the static method
+            informationOnContextUtilsMockedStatic.when(InformationOnContextUtils::getIdClientFromContext).thenReturn(clientId);
+
+            when(clientRelationshipsRepository.existsClientRelationshipsByClient_idAndFriendEmail(2L, addRelationShipsRequest.getEmail())).thenReturn(false);
+
+            Client friend = mock(Client.class);
+            when(friend.getId()).thenReturn(Long.parseLong(clientId));
+            when(clientService.findByEmail(addRelationShipsRequest.getEmail())).thenReturn(friend);
+
+            Exception exception = assertThrows(AddRelationShipsException.class, () -> relationShipsService.addRelationShips(addRelationShipsRequest));
+            assertEquals(SelfOrientedRelationshipException.class, exception.getCause().getClass());
         }
     }
 

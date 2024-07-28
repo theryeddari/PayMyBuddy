@@ -3,17 +3,19 @@ package com.thery.paymybuddy.utils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 
 import static com.thery.paymybuddy.Exceptions.InformationOnContextUtilsException.*;
 
 /**
  * Utils class for managing authentication operations such as sign up, sign in, and log out.
  */
-
+@Component
 public class InformationOnContextUtils {
 
     private static final Logger logger = LogManager.getLogger(InformationOnContextUtils.class);
 
+    private InformationOnContextUtils() {}
 
     /**
      * Retrieves the username (id) from the context authentication.

@@ -109,6 +109,10 @@
                 <configuration>
                     <!--config exclude class not interesting to test-->
                     <excludes>
+                        <exclude>com/thery/paymybuddy/models/**</exclude>
+                        <exclude>com/thery/paymybuddy/configs/**</exclude>
+                        <exclude>com/thery/paymybuddy/constants/**</exclude>
+                        <exclude>com/thery/paymybuddy/dto/**</exclude>
                     </excludes>
                 </configuration>
 

@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import static com.thery.paymybuddy.Exceptions.RelationShipsServiceException.*;
+import static com.thery.paymybuddy.Exceptions.RelationShipsServiceException.RelationshipsAlreadyExistException.*;
 import static com.thery.paymybuddy.constants.MessageExceptionConstants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -35,12 +36,12 @@ public class RelationShipsControllerAdviceTest {
 
     @Test
     public void testHandleAddRelationShips_SelfOrientedRelationshipException() {
-        AddRelationShipsException ex = new AddRelationShipsException(new RelationshipsAlreadyExistException());
+        AddRelationShipsException ex = new AddRelationShipsException(new SelfOrientedRelationshipException());
 
         ResponseEntity<String> response = advice.handleAddRelationShipsException(ex);
 
         assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
-        assertEquals(RELATIONSHIPS_ALREADY_EXIST_EXCEPTION, response.getBody());
+        assertEquals(SELF_ORIENTED_RELATIONSHIP_EXCEPTION, response.getBody());
     }
 
 

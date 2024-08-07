@@ -11,6 +11,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +79,7 @@ public class TransactionService {
 
             Client receiver = clientService.findByEmail(doTransferRequest.getReceiverEmail());
             isTransactionBetweenFriend(receiver.getEmail());
+            updateClientReceiverFund(receiver, doTransferRequest.getAmount());
 
 
             Transaction transaction = new Transaction();
@@ -95,13 +98,29 @@ public class TransactionService {
         }
     }
 
+    private void updateClientReceiverFund(Client receiver, Double amount) {
+        BigDecimal currentSaving = BigDecimal.valueOf(receiver.getSaving());
+        BigDecimal amountToTransfer = new BigDecimal(amount);
+
+        BigDecimal newSaving = currentSaving.add(amountToTransfer);
+
+        newSaving = newSaving.setScale(2, RoundingMode.HALF_UP);
+
+        receiver.setSaving(newSaving.doubleValue());
+    }
+
     private void isFundAvailableUpdateClient(Client sender, double amountTransfer) throws isFundAvailableException {
-        double saving = sender.getSaving();
-        double balance = saving - amountTransfer;
-        if(balance < 0){
+        BigDecimal saving = BigDecimal.valueOf(sender.getSaving());
+        BigDecimal transferAmount = new BigDecimal(amountTransfer);
+
+        BigDecimal balance = saving.subtract(transferAmount);
+
+        balance = balance.setScale(2, RoundingMode.HALF_UP);
+
+        if (balance.compareTo(BigDecimal.ZERO) < 0) {
             throw new isFundAvailableException();
         }
-        sender.setSaving(balance);
+        sender.setSaving(balance.doubleValue());
     }
 
     private void isTransactionBetweenFriend(String friendEmail) throws RelationShipsServiceException.RelationShipsDetailForTransferException, isTransactionBetweenFriendException {

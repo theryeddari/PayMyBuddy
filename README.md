@@ -1,5 +1,6 @@
 # PayMyBuddy
 financial application
+read it with code wiew and note Preview
 
 
 Transaction                                  Client                                             ClientRelationships   

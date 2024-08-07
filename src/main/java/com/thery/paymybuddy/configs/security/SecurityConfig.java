@@ -9,6 +9,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 /**
  * Configuration class for setting up security filters and policies.
@@ -45,6 +48,15 @@ public class SecurityConfig {
                                 .requestMatchers("/api/fr/client/**").hasRole("CLIENT") // Allow requests with role CLIENT to client endpoints
                                 .anyRequest().denyAll() // Deny any other requests
                 )
+                .cors(frontend -> frontend.configurationSource( request ->  {
+
+                                            CorsConfiguration config = new CorsConfiguration();
+                                            config.setAllowedOrigins(List.of("http://localhost:3000"));
+                                            config.addAllowedMethod("*");
+                                            config.addAllowedHeader("*");
+                                            config.addExposedHeader("*");
+                                            return config;
+                                        }))
                 .build();
     }
 

@@ -1,7 +1,7 @@
 # PayMyBuddy
 financial application
 
-read it with code view and note Preview
+read it with Code view and not Preview
 
 
 Transaction                                  Client                                             ClientRelationships   

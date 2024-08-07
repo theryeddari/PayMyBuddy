@@ -11,24 +11,22 @@ import lombok.Getter;
 public class ProfileClientChangeRequest {
 
     /**
+     * The username of the client.
+     */
+    private String username;
+    /**
+     * The email address of the client.
+     */
+    private String email;
+    /**
+     * The password of the client.
+     */
+    private String password;
+
+    /**
      * Default constructor for the ProfileChangeClientDTO class.
      */
     public ProfileClientChangeRequest() {
         // empty constructor for lombok
     }
-
-    /**
-     * The username of the client.
-     */
-    private String username;
-
-    /**
-     * The email address of the client.
-     */
-    private String email;
-
-    /**
-     * The password of the client.
-     */
-    private String password;
 }

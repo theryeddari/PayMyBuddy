@@ -1,7 +1,7 @@
 package com.thery.paymybuddy.controller;
 
-import com.thery.paymybuddy.service.AuthenticationManagementService;
 import com.thery.paymybuddy.dto.*;
+import com.thery.paymybuddy.service.AuthenticationManagementService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

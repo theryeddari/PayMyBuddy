@@ -1,7 +1,7 @@
 package com.thery.paymybuddy.service;
 
-import com.thery.paymybuddy.exception.RelationShipsServiceException;
 import com.thery.paymybuddy.dto.*;
+import com.thery.paymybuddy.exception.RelationShipsServiceException;
 import com.thery.paymybuddy.model.Client;
 import com.thery.paymybuddy.model.Transaction;
 import com.thery.paymybuddy.repository.TransactionRepository;
@@ -16,8 +16,8 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.thery.paymybuddy.exception.TransactionServiceException.*;
 import static com.thery.paymybuddy.constant.MessagesServicesConstants.TRANSFER_SUCCESS;
+import static com.thery.paymybuddy.exception.TransactionServiceException.*;
 
 /**
  * Service class for handling transactions.
@@ -54,7 +54,7 @@ public class TransactionService {
             long clientId = Long.parseLong(InformationOnContextUtils.getIdClientFromContext());
             List<Transaction> transactionsList = transactionRepository.findBySender_Id(clientId);
             List<TransferredGeneralDetailDTO> transferredGeneralDetailDTOList = new ArrayList<>();
-            transactionsList.forEach(transaction -> transferredGeneralDetailDTOList.add(new TransferredGeneralDetailDTO(transaction.getReceiver().getEmail(),transaction.getDescription(),transaction.getAmount())));
+            transactionsList.forEach(transaction -> transferredGeneralDetailDTOList.add(new TransferredGeneralDetailDTO(transaction.getReceiver().getEmail(), transaction.getDescription(), transaction.getAmount())));
             logger.info("Retrieving general transfer details.");
             return new TransferredGeneralDetailResponse(transferredGeneralDetailDTOList);
         } catch (Exception e) {
@@ -75,7 +75,7 @@ public class TransactionService {
         try {
             long clientId = Long.parseLong(InformationOnContextUtils.getIdClientFromContext());
             Client sender = clientService.findById(clientId);
-             isFundAvailableUpdateClient(sender, doTransferRequest.getAmount());
+            isFundAvailableUpdateClient(sender, doTransferRequest.getAmount());
 
             Client receiver = clientService.findByEmail(doTransferRequest.getReceiverEmail());
             isTransactionBetweenFriend(receiver.getEmail());
@@ -124,7 +124,7 @@ public class TransactionService {
     }
 
     private void isTransactionBetweenFriend(String friendEmail) throws RelationShipsServiceException.RelationShipsDetailForTransferException, isTransactionBetweenFriendException {
-        if(!relationshipsService.relationShipsDetailForTransfer().getListFriendsRelationShipsEmail().contains(friendEmail)){
+        if (!relationshipsService.relationShipsDetailForTransfer().getListFriendsRelationShipsEmail().contains(friendEmail)) {
             throw new isTransactionBetweenFriendException();
         }
     }

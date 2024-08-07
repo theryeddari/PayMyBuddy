@@ -15,8 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import static com.thery.paymybuddy.exception.AuthenticationManagementServiceException.*;
 import static com.thery.paymybuddy.constant.MessagesServicesConstants.*;
+import static com.thery.paymybuddy.exception.AuthenticationManagementServiceException.*;
 
 /**
  * Service class for managing authentication operations such as sign up, sign in, and log out.
@@ -35,10 +35,10 @@ public class AuthenticationManagementService {
      * Constructs an instance of AuthenticationManagementService.
      *
      * @param clientService               Repository for accessing client data.
-     * @param clientPasswordEncoder         Encoder for client passwords.
-     * @param authenticationConfiguration   Authentication configuration manager.
-     * @param jwtClientServiceConfig                     Service for handling JWT operations.
-     * @throws Exception                     Throws exception if initialization fails.
+     * @param clientPasswordEncoder       Encoder for client passwords.
+     * @param authenticationConfiguration Authentication configuration manager.
+     * @param jwtClientServiceConfig      Service for handling JWT operations.
+     * @throws Exception Throws exception if initialization fails.
      */
     public AuthenticationManagementService(ClientService clientService, @Qualifier("clientPasswordEncoder") PasswordEncoder clientPasswordEncoder, AuthenticationConfiguration authenticationConfiguration, JwtClientServiceConfig jwtClientServiceConfig) throws Exception {
         this.clientService = clientService;
@@ -50,9 +50,9 @@ public class AuthenticationManagementService {
     /**
      * Registers a new client.
      *
-     * @param newClient     DTO containing new client details.
-     * @return              Confirmation DTO with client details upon successful registration.
-     * @throws SignUpClientException     Throws exception if client registration fails.
+     * @param newClient DTO containing new client details.
+     * @return Confirmation DTO with client details upon successful registration.
+     * @throws SignUpClientException Throws exception if client registration fails.
      */
     @Transactional
     public SignUpResponse signUpClient(SignUpRequest newClient) throws SignUpClientException {
@@ -83,12 +83,12 @@ public class AuthenticationManagementService {
     /**
      * Authenticates a client.
      *
-     * @param SignInRequest     DTO containing client's sign-in credentials.
-     * @return              Success DTO with JWT token upon successful authentication.
-     * @throws SignInClientException    Throws exception if client authentication fails.
+     * @param SignInRequest DTO containing client's sign-in credentials.
+     * @return Success DTO with JWT token upon successful authentication.
+     * @throws SignInClientException Throws exception if client authentication fails.
      */
     @Transactional
-    public SignInResponseDTO  signInClient(SignInRequest SignInRequest) throws SignInClientException {
+    public SignInResponseDTO signInClient(SignInRequest SignInRequest) throws SignInClientException {
         try {
             Client client = clientService.findByEmail(SignInRequest.getEmail());
             Long clientId = client.getId();
@@ -99,7 +99,7 @@ public class AuthenticationManagementService {
 
             logger.info("Client signed in successfully: {}", SignInRequest.getEmail());
 
-            SignInResponse SignInResponse =  new SignInResponse(SIGN_IN_SUCCESS);
+            SignInResponse SignInResponse = new SignInResponse(SIGN_IN_SUCCESS);
             return new SignInResponseDTO(jwtToken, SignInResponse);
         } catch (Exception e) {
             logger.error("Error during client sign in", e);
@@ -110,8 +110,8 @@ public class AuthenticationManagementService {
     /**
      * Logs out a client.
      *
-     * @return              Success DTO upon successful client log out.
-     * @throws LogOutClientException    Throws exception if client log out fails.
+     * @return Success DTO upon successful client log out.
+     * @throws LogOutClientException Throws exception if client log out fails.
      */
     @Transactional
     public LogOutResponse logOutClient() throws LogOutClientException {

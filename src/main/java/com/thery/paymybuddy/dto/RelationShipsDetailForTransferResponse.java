@@ -13,14 +13,14 @@ import java.util.List;
 public class RelationShipsDetailForTransferResponse {
 
     /**
+     * List of email addresses for known friend relationships.
+     */
+    private List<String> listFriendsRelationShipsEmail;
+
+    /**
      * Default constructor needed for Lombok.
      */
     public RelationShipsDetailForTransferResponse() {
         // empty constructor for Lombok
     }
-
-    /**
-     * List of email addresses for known friend relationships.
-     */
-    private List<String> listFriendsRelationShipsEmail;
 }

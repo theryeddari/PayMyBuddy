@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import static com.thery.paymybuddy.exception.InformationOnContextUtilsException.*;
+import static com.thery.paymybuddy.exception.InformationOnContextUtilsException.GetIdClientFromContextException;
 
 /**
  * Utils class for managing authentication operations such as sign up, sign in, and log out.
@@ -15,7 +15,8 @@ public class InformationOnContextUtils {
 
     private static final Logger logger = LogManager.getLogger(InformationOnContextUtils.class);
 
-    private InformationOnContextUtils() {}
+    private InformationOnContextUtils() {
+    }
 
     /**
      * Retrieves the username (id) from the context authentication.

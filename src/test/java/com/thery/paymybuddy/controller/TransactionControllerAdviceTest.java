@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import static com.thery.paymybuddy.exception.TransactionServiceException.*;
 import static com.thery.paymybuddy.constant.MessageExceptionConstants.*;
+import static com.thery.paymybuddy.exception.TransactionServiceException.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TransactionControllerAdviceTest {
@@ -39,7 +39,7 @@ public class TransactionControllerAdviceTest {
         ResponseEntity<String> response = advice.handleDoTransferException(ex);
 
         assertEquals(HttpStatus.PAYMENT_REQUIRED, response.getStatusCode());
-        assertEquals(DO_TRANSFER_EXCEPTION + MORE_INFO + IS_FUND_AVAILABLE_EXCEPTION , response.getBody());
+        assertEquals(DO_TRANSFER_EXCEPTION + MORE_INFO + IS_FUND_AVAILABLE_EXCEPTION, response.getBody());
     }
 
     @Test
@@ -49,7 +49,7 @@ public class TransactionControllerAdviceTest {
         ResponseEntity<String> response = advice.handleDoTransferException(ex);
 
         assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
-        assertEquals(DO_TRANSFER_EXCEPTION + MORE_INFO + IS_TRANSACTION_BETWEEN_FRIEND_EXCEPTION , response.getBody());
+        assertEquals(DO_TRANSFER_EXCEPTION + MORE_INFO + IS_TRANSACTION_BETWEEN_FRIEND_EXCEPTION, response.getBody());
     }
 
     @Test
@@ -59,6 +59,6 @@ public class TransactionControllerAdviceTest {
         ResponseEntity<String> response = advice.HandleAggregationNecessaryInfoForTransferException(ex);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        assertEquals( AGGREGATION_NECESSARY_INFO_FOR_TRANSFER_RESPONSE_EXCEPTION , response.getBody());
+        assertEquals(AGGREGATION_NECESSARY_INFO_FOR_TRANSFER_RESPONSE_EXCEPTION, response.getBody());
     }
 }

@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import static com.thery.paymybuddy.exception.RelationShipsServiceException.*;
-import static com.thery.paymybuddy.exception.RelationShipsServiceException.RelationshipsAlreadyExistException.*;
 import static com.thery.paymybuddy.constant.MessageExceptionConstants.*;
+import static com.thery.paymybuddy.exception.RelationShipsServiceException.*;
+import static com.thery.paymybuddy.exception.RelationShipsServiceException.RelationshipsAlreadyExistException.SelfOrientedRelationshipException;
 
 
 /**

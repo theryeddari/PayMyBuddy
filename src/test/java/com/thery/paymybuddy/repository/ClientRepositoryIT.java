@@ -19,26 +19,30 @@ public class ClientRepositoryIT {
     void TestConnexionWithFindByEmail() {
         // Test de la méthode findByEmail
         Client foundClient = clientRepository.findByEmail("alice@example.com");
-        assertEquals("alice@example.com",foundClient.getEmail());
+        assertEquals("alice@example.com", foundClient.getEmail());
     }
+
     @Test
     void TestConnexionFindByEmailNotFound() {
         // Test de la méthode findByEmail
         Client foundClient = clientRepository.findByEmail("al@example.com");
         assertNull(foundClient);
     }
+
     @Test
     void TestExistsByEmail() {
         // Test de la méthode existsByEmail
         boolean foundClient = clientRepository.existsByEmail("alice@example.com");
         assertTrue(foundClient);
     }
+
     @Test
     void TestExistsByEmail_NotFound() {
         // Test de la méthode existsByEmail
         boolean foundClient = clientRepository.existsByEmail("zf@example.com");
         assertFalse(foundClient);
     }
+
     @Test
     void TestSaveClient_Success() {
         // Test de la méthode save
@@ -49,7 +53,7 @@ public class ClientRepositoryIT {
         client.setPassword("renaultp");
         client.setRole("CLIENT");
         Client foundClient = clientRepository.save(client);
-        assertEquals(client.getEmail(),foundClient.getEmail());
+        assertEquals(client.getEmail(), foundClient.getEmail());
     }
 
 }

@@ -11,14 +11,14 @@ import lombok.Getter;
 public class SavingClientResponse {
 
     /**
+     * The amount of savings for the client.
+     */
+    private double saving;
+
+    /**
      * Default constructor for the SavingClientResponse class.
      */
     public SavingClientResponse() {
         // empty constructor for lombok
     }
-
-    /**
-     * The amount of savings for the client.
-     */
-    private double saving;
 }

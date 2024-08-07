@@ -16,15 +16,16 @@ public class TransactionRepositoryIT {
     private TransactionRepository transactionRepository;
 
     @Test
-    void testConnexionByFindBySenderId(){
+    void testConnexionByFindBySenderId() {
         List<Transaction> list = transactionRepository.findBySender_Id(2L);
         Long receiverId = list.getFirst().getReceiver().getId();
         String description = list.getFirst().getDescription();
-        Assertions.assertEquals(1,receiverId);
-        Assertions.assertEquals("Payment for service",description);
+        Assertions.assertEquals(1, receiverId);
+        Assertions.assertEquals("Payment for service", description);
     }
+
     @Test
-    void testConnexionByFindBySenderIdNorFound(){
+    void testConnexionByFindBySenderIdNorFound() {
         List<Transaction> list = transactionRepository.findBySender_Id(5L);
         Assertions.assertTrue(list.isEmpty());
     }

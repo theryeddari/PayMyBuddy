@@ -11,14 +11,14 @@ import lombok.Getter;
 public class ProfileClientChangeResponse {
 
     /**
-     * Default constructor required by Lombok for its annotations.
-     */
-    public ProfileClientChangeResponse(){
-        // empty constructor for lombok
-    }
-
-    /**
      * A success message indicating the result of the profile change operation.
      */
     private String messageSuccess;
+
+    /**
+     * Default constructor required by Lombok for its annotations.
+     */
+    public ProfileClientChangeResponse() {
+        // empty constructor for lombok
+    }
 }

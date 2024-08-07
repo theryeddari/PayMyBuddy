@@ -20,9 +20,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Collection;
 import java.util.Set;
 
-import static com.thery.paymybuddy.exception.JwtClientServiceConfigException.*;
 import static com.thery.paymybuddy.constant.MessageExceptionConstants.*;
-import static com.thery.paymybuddy.constant.MessagesServicesConstants.*;
+import static com.thery.paymybuddy.constant.MessagesServicesConstants.CHANGE_PROFILE_SUCCESS;
+import static com.thery.paymybuddy.exception.JwtClientServiceConfigException.GenerateTokenConfigExceptionClient;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -34,17 +34,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ClientControllerIT {
 
     @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
     JwtClientServiceConfig jwtClientServiceConfig;
-
-    private ObjectMapper objectMapper;
-
     String jwtTokenAlice;
-
     String jwtTokenUnknownAuthenticated;
-
+    @Autowired
+    private MockMvc mockMvc;
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setUp() throws GenerateTokenConfigExceptionClient {
@@ -62,10 +57,10 @@ public class ClientControllerIT {
 
     @Test
     void testGetProfile_Success() throws Exception {
-        ProfileClientResponse profileClientResponse = new ProfileClientResponse("alice","alice@example.com");
+        ProfileClientResponse profileClientResponse = new ProfileClientResponse("alice", "alice@example.com");
 
         mockMvc.perform(get("/api/fr/client/dashboard/profil")
-                .header("Authorization", "Bearer " + jwtTokenAlice))
+                        .header("Authorization", "Bearer " + jwtTokenAlice))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(profileClientResponse)));
     }
@@ -81,10 +76,10 @@ public class ClientControllerIT {
 
     @Test
     void testChangeProfile_Success() throws Exception {
-        ProfileClientChangeRequest profileClientChangeRequest = new ProfileClientChangeRequest("robert","robert@example.fr","robertp");
+        ProfileClientChangeRequest profileClientChangeRequest = new ProfileClientChangeRequest("robert", "robert@example.fr", "robertp");
         ProfileClientChangeResponse profileClientChangeResponse = new ProfileClientChangeResponse(CHANGE_PROFILE_SUCCESS);
         mockMvc.perform(post("/api/fr/client/dashboard/profil")
-                .header("Authorization", "Bearer " + jwtTokenAlice)
+                        .header("Authorization", "Bearer " + jwtTokenAlice)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(profileClientChangeRequest)))
                 .andExpect(status().isOk())
@@ -94,7 +89,7 @@ public class ClientControllerIT {
     @Test
     void testChangeProfile_Failed() throws Exception {
 
-        ProfileClientChangeRequest profileClientChangeRequest = new ProfileClientChangeRequest("robert","robert@example.fr","robertp");
+        ProfileClientChangeRequest profileClientChangeRequest = new ProfileClientChangeRequest("robert", "robert@example.fr", "robertp");
 
         mockMvc.perform(post("/api/fr/client/dashboard/profil")
                         .header("Authorization", "Bearer " + jwtTokenUnknownAuthenticated)

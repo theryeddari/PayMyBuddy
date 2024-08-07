@@ -11,24 +11,22 @@ import lombok.Getter;
 public class SignUpRequest {
 
     /**
+     * The username of the user signing up.
+     */
+    private String username;
+    /**
+     * The email address of the user signing up.
+     */
+    private String email;
+    /**
+     * The password chosen by the user for signing up.
+     */
+    private String password;
+
+    /**
      * Default constructor needed for Lombok.
      */
     public SignUpRequest() {
         // empty constructor for lombok
     }
-
-    /**
-     * The username of the user signing up.
-     */
-    private String username;
-
-    /**
-     * The email address of the user signing up.
-     */
-    private String email;
-
-    /**
-     * The password chosen by the user for signing up.
-     */
-    private String password;
 }

@@ -48,15 +48,15 @@ public class SecurityConfig {
                                 .requestMatchers("/api/fr/client/**").hasRole("CLIENT") // Allow requests with role CLIENT to client endpoints
                                 .anyRequest().denyAll() // Deny any other requests
                 )
-                .cors(frontend -> frontend.configurationSource( request ->  {
+                .cors(frontend -> frontend.configurationSource(request -> {
 
-                                            CorsConfiguration config = new CorsConfiguration();
-                                            config.setAllowedOrigins(List.of("http://localhost:3000"));
-                                            config.addAllowedMethod("*");
-                                            config.addAllowedHeader("*");
-                                            config.addExposedHeader("*");
-                                            return config;
-                                        }))
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.setAllowedOrigins(List.of("http://localhost:3000"));
+                    config.addAllowedMethod("*");
+                    config.addAllowedHeader("*");
+                    config.addExposedHeader("*");
+                    return config;
+                }))
                 .build();
     }
 

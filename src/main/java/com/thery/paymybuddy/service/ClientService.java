@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.thery.paymybuddy.constant.MessagesServicesConstants.CHANGE_PROFILE_SUCCESS;
 import static com.thery.paymybuddy.exception.ClientServiceException.*;
-import static com.thery.paymybuddy.constant.MessagesServicesConstants.*;
 
 /**
  * Service class for handling client operations.
@@ -29,10 +29,11 @@ public class ClientService {
     private final ClientRepository clientRepository;
 
     private final PasswordEncoder clientPasswordEncoder;
+
     /**
      * Constructor for ClientService.
      *
-     * @param clientRepository the client repository
+     * @param clientRepository      the client repository
      * @param clientPasswordEncoder Encoder for client passwords.
      */
     public ClientService(ClientRepository clientRepository, PasswordEncoder clientPasswordEncoder) {
@@ -43,7 +44,7 @@ public class ClientService {
     /**
      * Retrieves the profile of the client.
      *
-     * @return  the profile client DTO
+     * @return the profile client DTO
      * @throws GetProfileException if an error occurs while getting the profile
      */
     @Transactional
@@ -52,7 +53,7 @@ public class ClientService {
         try {
             long clientId = Long.parseLong(InformationOnContextUtils.getIdClientFromContext());
             Client client = findById(clientId);
-            return new ProfileClientResponse(client.getUsername(),client.getEmail());
+            return new ProfileClientResponse(client.getUsername(), client.getEmail());
         } catch (Exception e) {
             logger.error("Error while retrieving client profile: {}", e.getMessage());
             throw new GetProfileException(e);
@@ -72,13 +73,13 @@ public class ClientService {
         try {
             long clientId = Long.parseLong(InformationOnContextUtils.getIdClientFromContext());
             Client client = findById(clientId);
-            if(!profileClientChangeRequest.getUsername().isEmpty()){
+            if (!profileClientChangeRequest.getUsername().isEmpty()) {
                 client.setUsername(profileClientChangeRequest.getUsername());
             }
-            if(!profileClientChangeRequest.getEmail().isEmpty()){
+            if (!profileClientChangeRequest.getEmail().isEmpty()) {
                 client.setEmail(profileClientChangeRequest.getEmail());
             }
-            if(!profileClientChangeRequest.getPassword().isEmpty()){
+            if (!profileClientChangeRequest.getPassword().isEmpty()) {
                 client.setPassword(clientPasswordEncoder.encode(profileClientChangeRequest.getPassword()));
             }
             clientRepository.save(client);
@@ -107,6 +108,7 @@ public class ClientService {
             throw new GetSavingClientException(e);
         }
     }
+
     /**
      * Retrieves the client details about email.
      *
@@ -124,6 +126,7 @@ public class ClientService {
             throw new FindByEmailException(e);
         }
     }
+
     /**
      * BackUp client details.
      *
@@ -137,6 +140,7 @@ public class ClientService {
             throw new SaveClientException(e);
         }
     }
+
     /**
      * retrieve  boolean about client exist.
      *
@@ -160,7 +164,7 @@ public class ClientService {
     public Client findById(Long clientId) throws FindByIdException {
         try {
             Optional<Client> client = clientRepository.findById(clientId);
-            if (client.isEmpty()){
+            if (client.isEmpty()) {
                 throw new AuthenticatedClientNotFoundException();
             }
             return client.get();

@@ -11,20 +11,19 @@ import lombok.Getter;
 public class ProfileClientResponse {
 
     /**
-     * Default constructor for ProfileClientDTO.
-     * Required by Lombok for internal usage.
-     */
-    public ProfileClientResponse(){
-        // empty constructor for lombok
-    }
-
-    /**
      * The username of the client.
      */
     private String username;
-
     /**
      * The email address of the client.
      */
     private String email;
+
+    /**
+     * Default constructor for ProfileClientDTO.
+     * Required by Lombok for internal usage.
+     */
+    public ProfileClientResponse() {
+        // empty constructor for lombok
+    }
 }

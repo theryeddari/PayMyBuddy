@@ -1,14 +1,5 @@
 package com.thery.paymybuddy.service;
 
-import static com.thery.paymybuddy.exception.ClientServiceException.*;
-import static com.thery.paymybuddy.exception.InformationOnContextUtilsException.*;
-import static com.thery.paymybuddy.exception.RelationShipsServiceException.*;
-import static com.thery.paymybuddy.exception.RelationShipsServiceException.RelationshipsAlreadyExistException.*;
-import static com.thery.paymybuddy.constant.MessagesServicesConstants.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
 import com.thery.paymybuddy.dto.AddRelationShipsRequest;
 import com.thery.paymybuddy.dto.AddRelationShipsResponse;
 import com.thery.paymybuddy.dto.RelationShipsDetailForTransferResponse;
@@ -26,16 +17,24 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+import static com.thery.paymybuddy.constant.MessagesServicesConstants.ADD_RELATION_SUCCESS;
+import static com.thery.paymybuddy.exception.ClientServiceException.FindByEmailException;
+import static com.thery.paymybuddy.exception.ClientServiceException.FindByIdException;
+import static com.thery.paymybuddy.exception.InformationOnContextUtilsException.GetIdClientFromContextException;
+import static com.thery.paymybuddy.exception.RelationShipsServiceException.*;
+import static com.thery.paymybuddy.exception.RelationShipsServiceException.RelationshipsAlreadyExistException.SelfOrientedRelationshipException;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 
 @ExtendWith(MockitoExtension.class)
 public class RelationShipsServiceTest {
 
     @Mock
-    private ClientRelationshipsRepository clientRelationshipsRepository;
-
-    @Mock
     ClientService clientService;
-
+    @Mock
+    private ClientRelationshipsRepository clientRelationshipsRepository;
     @InjectMocks
     private RelationShipsService relationShipsService;
 
@@ -73,8 +72,8 @@ public class RelationShipsServiceTest {
             assertNotNull(captorNewClientRelationships.getValue().getClient());
 
             assertEquals(ADD_RELATION_SUCCESS, addRelationShipsResponse.getMessageSuccess());
-     }
-}
+        }
+    }
 
     @Test
     public void testAddRelationShips_RelationshipsAlreadyExistException() throws FindByEmailException {
@@ -136,8 +135,9 @@ public class RelationShipsServiceTest {
 
             assertEquals(client.getEmail(), relationShipsDetailForTransferResponse.getListFriendsRelationShipsEmail().getFirst());
 
+        }
     }
-}
+
     @Test
     public void testRelationShipsDetailForTransfer_Exception() {
         try (MockedStatic<InformationOnContextUtils> informationOnContextUtilsMockedStatic = mockStatic(InformationOnContextUtils.class)) {

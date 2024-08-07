@@ -14,6 +14,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     /**
      * Retrieves a list of transactions sent by a specific customer.
+     *
      * @param customerId The ID of the customer whose transactions are to be retrieved.
      * @return A list of transactions sent by the specified customer.
      */

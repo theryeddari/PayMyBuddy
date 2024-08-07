@@ -1,16 +1,10 @@
 package com.thery.paymybuddy.service;
 
-import static com.thery.paymybuddy.exception.ClientServiceException.*;
-import static com.thery.paymybuddy.constant.MessagesServicesConstants.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
-
-import com.thery.paymybuddy.exception.InformationOnContextUtilsException.GetIdClientFromContextException;
 import com.thery.paymybuddy.dto.ProfileClientChangeRequest;
 import com.thery.paymybuddy.dto.ProfileClientChangeResponse;
 import com.thery.paymybuddy.dto.ProfileClientResponse;
 import com.thery.paymybuddy.dto.SavingClientResponse;
+import com.thery.paymybuddy.exception.InformationOnContextUtilsException.GetIdClientFromContextException;
 import com.thery.paymybuddy.model.Client;
 import com.thery.paymybuddy.repository.ClientRepository;
 import com.thery.paymybuddy.util.InformationOnContextUtils;
@@ -24,6 +18,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
+
+import static com.thery.paymybuddy.constant.MessagesServicesConstants.CHANGE_PROFILE_SUCCESS;
+import static com.thery.paymybuddy.exception.ClientServiceException.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ClientServiceTest {
@@ -73,7 +73,7 @@ public class ClientServiceTest {
 
     @Test
     public void testChangeProfile_WithoutPasswordAndEmailModification_Success() throws ChangeProfileException {
-        ProfileClientChangeRequest profileClientChangeRequest = new ProfileClientChangeRequest("robert","","");
+        ProfileClientChangeRequest profileClientChangeRequest = new ProfileClientChangeRequest("robert", "", "");
 
         Client client = mock(Client.class);
         client.setEmail("test@example.com");
@@ -93,13 +93,13 @@ public class ClientServiceTest {
             verify(client, never()).setEmail(profileClientChangeRequest.getEmail());
             verify(client, never()).setPassword(clientPasswordEncoder.encode(profileClientChangeRequest.getPassword()));
 
-            Assertions.assertEquals(CHANGE_PROFILE_SUCCESS,profileClientChangeResponse.getMessageSuccess() );
+            Assertions.assertEquals(CHANGE_PROFILE_SUCCESS, profileClientChangeResponse.getMessageSuccess());
         }
     }
 
     @Test
     public void testChangeProfile_WithPasswordModification_Success() throws ChangeProfileException {
-        ProfileClientChangeRequest profileClientChangeRequest = new ProfileClientChangeRequest("robert","alice.robert@gmail.com","robertp");
+        ProfileClientChangeRequest profileClientChangeRequest = new ProfileClientChangeRequest("robert", "alice.robert@gmail.com", "robertp");
 
         Client client = mock(Client.class);
 
@@ -118,9 +118,10 @@ public class ClientServiceTest {
             verify(client).setUsername(profileClientChangeRequest.getUsername());
             verify(client).setEmail(profileClientChangeRequest.getEmail());
             verify(client).setPassword(clientPasswordEncoder.encode(profileClientChangeRequest.getPassword()));
-            Assertions.assertEquals(CHANGE_PROFILE_SUCCESS,profileClientChangeResponse.getMessageSuccess() );
+            Assertions.assertEquals(CHANGE_PROFILE_SUCCESS, profileClientChangeResponse.getMessageSuccess());
         }
     }
+
     @Test
     public void testChangeProfile_Exception() {
         try (MockedStatic<InformationOnContextUtils> informationOnContextUtilsMockedStatic = mockStatic(InformationOnContextUtils.class)) {
@@ -154,6 +155,7 @@ public class ClientServiceTest {
         assertEquals(GetIdClientFromContextException.class, exception.getCause().getClass());
 
     }
+
     @Test
     public void testFindByEmail_Success() throws FindByEmailException {
         when(clientRepository.findByEmail(anyString())).thenReturn(new Client());
@@ -185,7 +187,7 @@ public class ClientServiceTest {
     @Test
     public void testIsExistClient_IsExistClientException() {
         when(clientRepository.existsByEmail(anyString())).thenThrow(new RuntimeException());
-        assertThrows(IsExistClientException.class,() -> clientService.isExistClient(anyString()));
+        assertThrows(IsExistClientException.class, () -> clientService.isExistClient(anyString()));
     }
 
 

@@ -11,16 +11,16 @@ import lombok.Getter;
 public class AddRelationShipsRequest {
 
     /**
+     * Email of the user to establish a relationship.
+     */
+    private String email;
+
+    /**
      * Default constructor.
      * This constructor is required by Lombok.
      */
     public AddRelationShipsRequest() {
         // empty constructor for lombok
     }
-
-    /**
-     * Email of the user to establish a relationship.
-     */
-    private String email;
 }
 

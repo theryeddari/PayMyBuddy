@@ -4,17 +4,18 @@
  */
 package com.thery.paymybuddy.controller;
 
-import com.thery.paymybuddy.service.RelationShipsService;
 import com.thery.paymybuddy.dto.AddRelationShipsRequest;
 import com.thery.paymybuddy.dto.AddRelationShipsResponse;
 import com.thery.paymybuddy.dto.RelationShipsDetailForTransferResponse;
+import com.thery.paymybuddy.service.RelationShipsService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import static com.thery.paymybuddy.exception.RelationShipsServiceException.*;
+import static com.thery.paymybuddy.exception.RelationShipsServiceException.AddRelationShipsException;
+import static com.thery.paymybuddy.exception.RelationShipsServiceException.RelationShipsDetailForTransferException;
 
 /**
  * REST controller for managing relationships between clients in the dashboard.
@@ -31,6 +32,7 @@ public class RelationShipsController {
 
     /**
      * Endpoint to add a new relationship.
+     *
      * @param addRelationShips DTO containing data for adding relationships
      * @return DTO indicating success or failure of adding relationships
      */
@@ -45,6 +47,7 @@ public class RelationShipsController {
 
     /**
      * Endpoint to retrieve general relationship details for transfer.
+     *
      * @return DTO containing general relationship details for transfer
      */
     @GetMapping("/relationships")

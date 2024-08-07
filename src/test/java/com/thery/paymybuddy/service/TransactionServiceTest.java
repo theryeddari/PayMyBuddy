@@ -1,28 +1,33 @@
 package com.thery.paymybuddy.service;
 
-import static com.thery.paymybuddy.exception.ClientServiceException.*;
-import static com.thery.paymybuddy.exception.InformationOnContextUtilsException.*;
-import static com.thery.paymybuddy.exception.TransactionServiceException.*;
-import static com.thery.paymybuddy.constant.MessageExceptionConstants.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thery.paymybuddy.exception.RelationShipsServiceException;
 import com.thery.paymybuddy.constant.MessagesServicesConstants;
 import com.thery.paymybuddy.dto.*;
+import com.thery.paymybuddy.exception.RelationShipsServiceException;
 import com.thery.paymybuddy.model.Client;
 import com.thery.paymybuddy.model.Transaction;
 import com.thery.paymybuddy.repository.TransactionRepository;
 import com.thery.paymybuddy.util.InformationOnContextUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.thery.paymybuddy.constant.MessageExceptionConstants.IS_FUND_AVAILABLE_EXCEPTION;
+import static com.thery.paymybuddy.constant.MessageExceptionConstants.IS_TRANSACTION_BETWEEN_FRIEND_EXCEPTION;
+import static com.thery.paymybuddy.exception.ClientServiceException.*;
+import static com.thery.paymybuddy.exception.InformationOnContextUtilsException.GetIdClientFromContextException;
+import static com.thery.paymybuddy.exception.TransactionServiceException.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -75,7 +80,7 @@ public class TransactionServiceTest {
     @Test
     public void testGetTransferredGeneralDetail_Exception() {
         Exception exception = assertThrows(GetTransferredGeneralDetailException.class, () -> transactionService.getTransferredGeneralDetail());
-        assertEquals(GetIdClientFromContextException.class,exception.getCause().getClass());
+        assertEquals(GetIdClientFromContextException.class, exception.getCause().getClass());
     }
 
     @Test
@@ -105,7 +110,6 @@ public class TransactionServiceTest {
             when(relationShipsDetailForTransferResponse.getListFriendsRelationShipsEmail()).thenReturn(emailFriendList);
 
 
-
             when(transactionRepository.save(any(Transaction.class))).thenReturn(new Transaction());
 
             ArgumentCaptor<Transaction> transactionArgumentCaptor = ArgumentCaptor.forClass(Transaction.class);
@@ -115,13 +119,13 @@ public class TransactionServiceTest {
             verify(transactionRepository).save(transactionArgumentCaptor.capture());
 
             assertEquals(1L, transactionArgumentCaptor.getValue().getSender().getId());
-            assertEquals("test@example.com",transactionArgumentCaptor.getValue().getReceiver().getEmail());
-            assertEquals("description test",transactionArgumentCaptor.getValue().getDescription());
-            assertEquals(10.0,transactionArgumentCaptor.getValue().getAmount());
+            assertEquals("test@example.com", transactionArgumentCaptor.getValue().getReceiver().getEmail());
+            assertEquals("description test", transactionArgumentCaptor.getValue().getDescription());
+            assertEquals(10.0, transactionArgumentCaptor.getValue().getAmount());
 
             //check private method who subtracted amount transaction to saving of client
-            assertEquals(90.00 ,transactionArgumentCaptor.getValue().getSender().getSaving());
-            assertEquals(doTransferResponseExcepted.getMessageSuccess(),doTransferResponse.getMessageSuccess());
+            assertEquals(90.00, transactionArgumentCaptor.getValue().getSender().getSaving());
+            assertEquals(doTransferResponseExcepted.getMessageSuccess(), doTransferResponse.getMessageSuccess());
         }
     }
 
@@ -172,12 +176,13 @@ public class TransactionServiceTest {
             assertEquals(IS_TRANSACTION_BETWEEN_FRIEND_EXCEPTION, exception.getCause().getMessage());
         }
     }
+
     @Test
     public void testAggregationNecessaryInfoForTransfer() throws GetSavingClientException, RelationShipsServiceException.RelationShipsDetailForTransferException, JsonProcessingException, AggregationNecessaryInfoForTransferResponseException {
         SavingClientResponse savingClientResponse = new SavingClientResponse(100.00);
         List<String> emailFriendList = List.of("test@example.com");
         RelationShipsDetailForTransferResponse relationShipsDetailForTransferResponse = new RelationShipsDetailForTransferResponse(emailFriendList);
-        TransferredGeneralDetailDTO transferredGeneralDetailDTO= new  TransferredGeneralDetailDTO("test@example.com", "description test", 10.0);
+        TransferredGeneralDetailDTO transferredGeneralDetailDTO = new TransferredGeneralDetailDTO("test@example.com", "description test", 10.0);
         List<TransferredGeneralDetailDTO> transferredGeneralDetailDTOList = List.of(transferredGeneralDetailDTO);
         TransferredGeneralDetailResponse transferredGeneralDetailResponse = new TransferredGeneralDetailResponse(transferredGeneralDetailDTOList);
         AggregationNecessaryInfoForTransferResponse aggregationNecessaryInfoForTransferResponseExcepted = new AggregationNecessaryInfoForTransferResponse(transferredGeneralDetailResponse, relationShipsDetailForTransferResponse, savingClientResponse);

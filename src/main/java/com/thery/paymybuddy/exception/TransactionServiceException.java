@@ -57,6 +57,7 @@ public class TransactionServiceException extends Exception {
             super(DO_TRANSFER_EXCEPTION + MORE_INFO + cause.getClass() + " " + cause.getMessage(), cause);
         }
     }
+
     /**
      * Exception class for errors occurring during the execution of a transfer operation with negative balance.
      */
@@ -81,6 +82,7 @@ public class TransactionServiceException extends Exception {
             super(MessageExceptionConstants.IS_TRANSACTION_BETWEEN_FRIEND_EXCEPTION);
         }
     }
+
     /**
      * Exception class for errors occurring during the aggregation of necessary information that client need to start transfer
      */

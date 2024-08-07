@@ -13,14 +13,14 @@ import java.util.List;
 public class TransferredGeneralDetailResponse {
 
     /**
-     * Empty constructor for Lombok.
-     */
-    public TransferredGeneralDetailResponse(){
-        // empty constructor for lombok
-    }
-
-    /**
      * List of individual transfer success details.
      */
     private List<TransferredGeneralDetailDTO> listTransferredSuccesses;
+
+    /**
+     * Empty constructor for Lombok.
+     */
+    public TransferredGeneralDetailResponse() {
+        // empty constructor for lombok
+    }
 }

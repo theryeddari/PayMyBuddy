@@ -8,14 +8,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
-import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.jwt.JwsHeader;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.thery.paymybuddy.exception.JwtClientServiceConfigException.*;
+import static com.thery.paymybuddy.exception.JwtClientServiceConfigException.GenerateTokenConfigExceptionClient;
 
 /**
  * Service class for handling JWT token operations.
@@ -24,16 +27,14 @@ import static com.thery.paymybuddy.exception.JwtClientServiceConfigException.*;
 public class JwtClientServiceConfig {
 
     private static final Logger logger = LogManager.getLogger(JwtClientServiceConfig.class);
-
+    private final JwtEncoder jwtEncoder;
     @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
     private String serverUrl;
-
-    private final JwtEncoder jwtEncoder;
 
     /**
      * Constructor for JwtClientServiceConfig.
      *
-     * @param jwtEncoder      the JWT encoder
+     * @param jwtEncoder the JWT encoder
      */
     public JwtClientServiceConfig(@Qualifier("clientJwtEncoder") JwtEncoder jwtEncoder) {
         this.jwtEncoder = jwtEncoder;
@@ -49,7 +50,7 @@ public class JwtClientServiceConfig {
         try {
             String nameClient = authentication.getName();
 
-            logger.debug("Generating token for user: {}",nameClient);
+            logger.debug("Generating token for user: {}", nameClient);
 
             Set<String> roles = authentication.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)

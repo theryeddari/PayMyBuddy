@@ -21,8 +21,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static com.thery.paymybuddy.exception.JwtClientServiceConfigException.GenerateTokenConfigExceptionClient;
 import static com.thery.paymybuddy.constant.MessageExceptionConstants.*;
+import static com.thery.paymybuddy.exception.JwtClientServiceConfigException.GenerateTokenConfigExceptionClient;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -34,18 +34,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class TransactionControllerIT {
 
     @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
     JwtClientServiceConfig jwtClientServiceConfig;
-
     @SpyBean
     TransactionRepository transactionRepository;
-
-    private ObjectMapper objectMapper;
-
     String jwtTokenBob;
-
+    @Autowired
+    private MockMvc mockMvc;
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setUp() throws GenerateTokenConfigExceptionClient {
@@ -71,6 +66,7 @@ public class TransactionControllerIT {
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(transferredGeneralDetailResponse)));
     }
+
     @Test
     public void testGetTransferredGeneralDetail_Failed() throws Exception {
         when(transactionRepository.findBySender_Id(anyLong())).thenThrow(new RuntimeException());
@@ -106,6 +102,7 @@ public class TransactionControllerIT {
                 .andExpect(status().isPaymentRequired())
                 .andExpect(content().string(DO_TRANSFER_EXCEPTION + MORE_INFO + IS_FUND_AVAILABLE_EXCEPTION));
     }
+
     //try to transfer fund with somebody who is not in its relation
     @Test
     public void testDoTransfer_IsTransactionBetweenFriendException() throws Exception {

@@ -1,6 +1,7 @@
 package com.thery.paymybuddy.exception;
 
-import static com.thery.paymybuddy.constant.MessageExceptionConstants.*;
+import static com.thery.paymybuddy.constant.MessageExceptionConstants.GENERATE_TOKEN_EXCEPTION;
+import static com.thery.paymybuddy.constant.MessageExceptionConstants.MORE_INFO;
 
 /**
  * Exception class for handling transaction-related service errors.

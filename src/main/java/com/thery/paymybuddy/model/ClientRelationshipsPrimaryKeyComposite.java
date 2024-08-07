@@ -1,6 +1,6 @@
 package com.thery.paymybuddy.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
@@ -12,8 +12,8 @@ import java.io.Serializable;
 @Embeddable
 @EqualsAndHashCode
 public class ClientRelationshipsPrimaryKeyComposite implements Serializable {
-    private  Client client;    // The Entity Client with ID of Client user in properties
-    private  Client friend;  // The Entity Client with ID of Client friend in properties
+    private Client client;    // The Entity Client with ID of Client user in properties
+    private Client friend;  // The Entity Client with ID of Client friend in properties
 
 
     // Getters and setters can be added if necessary

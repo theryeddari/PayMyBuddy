@@ -11,15 +11,15 @@ import lombok.Getter;
 public class LogOutResponse {
 
     /**
+     * Farewell message displayed after successful logout.
+     */
+    private String goodByeMessage;
+
+    /**
      * Default constructor for Lombok.
      */
     public LogOutResponse() {
         // empty constructor for lombok
     }
-
-    /**
-     * Farewell message displayed after successful logout.
-     */
-    private String goodByeMessage;
 
 }

@@ -1,10 +1,10 @@
 package com.thery.paymybuddy.controller;
 
-import com.thery.paymybuddy.service.TransactionService;
 import com.thery.paymybuddy.dto.AggregationNecessaryInfoForTransferResponse;
 import com.thery.paymybuddy.dto.DoTransferRequest;
 import com.thery.paymybuddy.dto.DoTransferResponse;
 import com.thery.paymybuddy.dto.TransferredGeneralDetailResponse;
+import com.thery.paymybuddy.service.TransactionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

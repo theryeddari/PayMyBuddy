@@ -7,8 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import static com.thery.paymybuddy.exception.ClientServiceException.*;
 import static com.thery.paymybuddy.constant.MessageExceptionConstants.*;
+import static com.thery.paymybuddy.exception.ClientServiceException.*;
 
 /**
  * Controller advice to handle exceptions thrown by ClientController.
@@ -20,6 +20,7 @@ public class ClientControllerAdvice {
 
     /**
      * Handles GetProfileException and logs the error message.
+     *
      * @param ex The exception object.
      * @return ResponseEntity with an error message and HTTP status code INTERNAL_SERVER_ERROR.
      */
@@ -31,6 +32,7 @@ public class ClientControllerAdvice {
 
     /**
      * Handles ChangeProfileException and logs the error message.
+     *
      * @param ex The exception object.
      * @return ResponseEntity with an error message and HTTP status code INTERNAL_SERVER_ERROR.
      */
@@ -42,6 +44,7 @@ public class ClientControllerAdvice {
 
     /**
      * Handles GetSavingClientException and logs the error message.
+     *
      * @param ex The exception object.
      * @return ResponseEntity with an error message and HTTP status code INTERNAL_SERVER_ERROR.
      */

@@ -20,10 +20,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static com.thery.paymybuddy.exception.JwtClientServiceConfigException.*;
 import static com.thery.paymybuddy.constant.MessageExceptionConstants.RELATIONSHIPS_ALREADY_EXIST_EXCEPTION;
 import static com.thery.paymybuddy.constant.MessageExceptionConstants.SELF_ORIENTED_RELATIONSHIP_EXCEPTION;
-import static com.thery.paymybuddy.constant.MessagesServicesConstants.*;
+import static com.thery.paymybuddy.constant.MessagesServicesConstants.ADD_RELATION_SUCCESS;
+import static com.thery.paymybuddy.exception.JwtClientServiceConfigException.GenerateTokenConfigExceptionClient;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -35,17 +35,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RelationShipsControllerIT {
 
     @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
     JwtClientServiceConfig jwtClientServiceConfig;
-
-    private ObjectMapper objectMapper;
-
     String jwtTokenBob;
-
     String jwtTokenAlice;
-
+    @Autowired
+    private MockMvc mockMvc;
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setUp() throws GenerateTokenConfigExceptionClient {
@@ -68,11 +63,12 @@ public class RelationShipsControllerIT {
 
         mockMvc.perform(post("/api/fr/client/dashboard/relationships")
                         .header("Authorization", "Bearer " + jwtTokenBob)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(addRelationShipsRequest)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(addRelationShipsRequest)))
                 .andExpect(status().isCreated())
                 .andExpect(content().json(objectMapper.writeValueAsString(addRelationShipsResponse)));
     }
+
     @Test
     public void testAddRelationShips_RelationshipsAlreadyExistException() throws Exception {
         AddRelationShipsRequest addRelationShipsRequest = new AddRelationShipsRequest("bob@example.com");
@@ -99,7 +95,7 @@ public class RelationShipsControllerIT {
 
     @Test
     public void testRelationShipsDetailForTransfer_Success() throws Exception {
-        RelationShipsDetailForTransferResponse relationShipsDetailForTransferResponse = new RelationShipsDetailForTransferResponse(List.of("bob@example.com","carol@example.com","dave@example.com"));
+        RelationShipsDetailForTransferResponse relationShipsDetailForTransferResponse = new RelationShipsDetailForTransferResponse(List.of("bob@example.com", "carol@example.com", "dave@example.com"));
 
         mockMvc.perform(get("/api/fr/client/dashboard/relationships")
                         .header("Authorization", "Bearer " + jwtTokenAlice)

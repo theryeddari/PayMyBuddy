@@ -22,7 +22,7 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
      * Retrieve a boolean in function Client entity by its email address exist.
      *
      * @param email The email address of the client to retrieve.
-     * @return  {@code true} if a client exists, {@code false} otherwise. .
+     * @return {@code true} if a client exists, {@code false} otherwise. .
      */
     boolean existsByEmail(String email);
 }

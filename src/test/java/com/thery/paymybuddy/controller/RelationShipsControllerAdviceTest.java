@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import static com.thery.paymybuddy.exception.RelationShipsServiceException.*;
-import static com.thery.paymybuddy.exception.RelationShipsServiceException.RelationshipsAlreadyExistException.*;
 import static com.thery.paymybuddy.constant.MessageExceptionConstants.*;
+import static com.thery.paymybuddy.exception.RelationShipsServiceException.*;
+import static com.thery.paymybuddy.exception.RelationShipsServiceException.RelationshipsAlreadyExistException.SelfOrientedRelationshipException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RelationShipsControllerAdviceTest {

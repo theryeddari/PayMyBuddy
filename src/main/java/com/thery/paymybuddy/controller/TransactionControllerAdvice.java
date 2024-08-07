@@ -7,8 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import static com.thery.paymybuddy.exception.TransactionServiceException.*;
 import static com.thery.paymybuddy.constant.MessageExceptionConstants.*;
+import static com.thery.paymybuddy.exception.TransactionServiceException.*;
 
 
 /**
@@ -40,14 +40,15 @@ public class TransactionControllerAdvice {
     @ExceptionHandler(DoTransferException.class)
     public ResponseEntity<String> handleDoTransferException(DoTransferException ex) {
         logger.error("{}", ex.getMessage());
-        if(ex.getCause() instanceof isFundAvailableException) {
+        if (ex.getCause() instanceof isFundAvailableException) {
             return new ResponseEntity<>(DO_TRANSFER_EXCEPTION + MORE_INFO + IS_FUND_AVAILABLE_EXCEPTION, HttpStatus.PAYMENT_REQUIRED);
         }
-        if(ex.getCause() instanceof isTransactionBetweenFriendException) {
+        if (ex.getCause() instanceof isTransactionBetweenFriendException) {
             return new ResponseEntity<>(DO_TRANSFER_EXCEPTION + MORE_INFO + IS_TRANSACTION_BETWEEN_FRIEND_EXCEPTION, HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<>(DO_TRANSFER_EXCEPTION, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
     @ExceptionHandler(AggregationNecessaryInfoForTransferResponseException.class)
     public ResponseEntity<String> HandleAggregationNecessaryInfoForTransferException(AggregationNecessaryInfoForTransferResponseException ex) {
         logger.error("{}", ex.getMessage());

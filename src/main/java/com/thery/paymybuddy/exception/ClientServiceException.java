@@ -24,7 +24,9 @@ public class ClientServiceException extends Exception {
      *
      * @param message the detail message (which is saved for later retrieval by the getMessage() method).
      */
-    public ClientServiceException(String message) { super(message); }
+    public ClientServiceException(String message) {
+        super(message);
+    }
 
 
     /**
@@ -111,6 +113,7 @@ public class ClientServiceException extends Exception {
             super(CLIENT_BACKUP_EXCEPTION + MORE_INFO + " " + cause.getClass() + " " + cause.getMessage(), cause);
         }
     }
+
     /**
      * Exception class for exist check client operation errors.
      */
@@ -124,6 +127,7 @@ public class ClientServiceException extends Exception {
             super(CLIENT_IS_EXIST_EXCEPTION + MORE_INFO + " " + cause.getClass() + " " + cause.getMessage(), cause);
         }
     }
+
     /**
      * Exception class for client find operation errors.
      */

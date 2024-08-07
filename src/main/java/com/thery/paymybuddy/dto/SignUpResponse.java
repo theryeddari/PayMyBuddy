@@ -11,14 +11,14 @@ import lombok.Getter;
 public class SignUpResponse {
 
     /**
+     * A success message indicating the result of the saving operation.
+     */
+    private String messageSuccess;
+
+    /**
      * Default constructor for the SignedUpConfirmDTO class.
      */
     public SignUpResponse() {
         // empty constructor for lombok
     }
-
-    /**
-     * A success message indicating the result of the saving operation.
-     */
-    private String messageSuccess;
 }

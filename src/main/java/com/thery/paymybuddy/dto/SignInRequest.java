@@ -11,19 +11,18 @@ import lombok.Getter;
 public class SignInRequest {
 
     /**
+     * The email address of the user.
+     */
+    private String email;
+    /**
+     * The password of the user.
+     */
+    private String password;
+
+    /**
      * Default constructor for SignInRequest.
      */
     public SignInRequest() {
         // empty constructor for lombok
     }
-
-    /**
-     * The email address of the user.
-     */
-    private String email;
-
-    /**
-     * The password of the user.
-     */
-    private String password;
 }

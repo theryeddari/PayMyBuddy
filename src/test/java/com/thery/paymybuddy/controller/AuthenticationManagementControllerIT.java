@@ -16,8 +16,10 @@ import java.util.Optional;
 import static com.thery.paymybuddy.constant.MessageExceptionConstants.CLIENT_ALREADY_EXISTS_EXCEPTION;
 import static com.thery.paymybuddy.constant.MessageExceptionConstants.CLIENT_NOT_FOUND_EXCEPTION;
 import static com.thery.paymybuddy.constant.MessagesServicesConstants.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc()
@@ -35,7 +37,7 @@ public class AuthenticationManagementControllerIT {
 
     @Test
     public void testSignUpClient_Success() throws Exception {
-        SignUpRequest signUpRequest = new SignUpRequest("test","test@example.com", "testPassword");
+        SignUpRequest signUpRequest = new SignUpRequest("test", "test@example.com", "testPassword");
         SignUpResponse signUpResponse = new SignUpResponse(SIGN_UP_SUCCESS);
 
         mockMvc.perform(post("/api/fr/auth/signup")
@@ -47,7 +49,7 @@ public class AuthenticationManagementControllerIT {
 
     @Test
     public void testSignUpClient_ClientAlreadyExistException() throws Exception {
-        SignUpRequest signUpRequest = new SignUpRequest("alice","alice@example.com", "alicep");
+        SignUpRequest signUpRequest = new SignUpRequest("alice", "alice@example.com", "alicep");
 
         mockMvc.perform(post("/api/fr/auth/signup")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -59,16 +61,16 @@ public class AuthenticationManagementControllerIT {
     @Test
     public void testSignInClient_Success() throws Exception {
         SignInRequest signInRequest = new SignInRequest("alice@example.com", "alicep");
-        SignInResponse  signInSuccessDTO = new SignInResponse(SIGN_IN_SUCCESS);
+        SignInResponse signInSuccessDTO = new SignInResponse(SIGN_IN_SUCCESS);
         mockMvc.perform(post("/api/fr/auth/signin")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signInRequest)))
                 .andExpect(status().isOk())
                 .andExpect(header -> {
-                        Optional<String> authorizationHeader = Optional.ofNullable(header.getResponse().getHeader(HttpHeaders.AUTHORIZATION));
-                        if (authorizationHeader.isEmpty() || !authorizationHeader.get().startsWith("Bearer ")) {
-                                throw new AssertionError("AUTHORIZATION is not present check jwt service" );
-                         }
+                    Optional<String> authorizationHeader = Optional.ofNullable(header.getResponse().getHeader(HttpHeaders.AUTHORIZATION));
+                    if (authorizationHeader.isEmpty() || !authorizationHeader.get().startsWith("Bearer ")) {
+                        throw new AssertionError("AUTHORIZATION is not present check jwt service");
+                    }
                 })
                 .andExpect(content().json(objectMapper.writeValueAsString(signInSuccessDTO)));
     }

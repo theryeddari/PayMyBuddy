@@ -11,10 +11,11 @@ import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
+import static com.thery.paymybuddy.constant.MessagesServicesConstants.ADD_RELATION_SUCCESS;
 import static com.thery.paymybuddy.exception.RelationShipsServiceException.*;
-import static com.thery.paymybuddy.constant.MessagesServicesConstants.*;
 
 /**
  * Service for managing relationships between clients.
@@ -44,11 +45,11 @@ public class RelationShipsService {
         logger.debug("Adding new relationship: {}", addRelationShips);
         try {
             long clientId = Long.parseLong(InformationOnContextUtils.getIdClientFromContext());
-            if(clientRelationshipsRepository.existsClientRelationshipsByClient_idAndFriendEmail(clientId, addRelationShips.getEmail())) {
+            if (clientRelationshipsRepository.existsClientRelationshipsByClient_idAndFriendEmail(clientId, addRelationShips.getEmail())) {
                 throw new RelationshipsAlreadyExistException();
             }
             Client friend = clientService.findByEmail(addRelationShips.getEmail());
-            if(friend.getId() == clientId) {
+            if (friend.getId() == clientId) {
                 throw new RelationshipsAlreadyExistException.SelfOrientedRelationshipException();
             }
             Client client = clientService.findById(clientId);

@@ -1,4 +1,3 @@
-
 package com.thery.paymybuddy;
 
 import org.junit.jupiter.api.Test;
@@ -9,6 +8,6 @@ public class PayMyBuddyApplicationTest {
 
     @Test
     public void contextLoads() {
-        PayMyBuddyApplication.main(new String[] {});
+        PayMyBuddyApplication.main(new String[]{});
     }
 }

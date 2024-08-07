@@ -11,13 +11,14 @@ import lombok.Getter;
 public class SignInResponse {
 
     /**
+     * A welcoming message or any additional information to be displayed after sign-in.
+     */
+    private String welcomingMessage;
+
+    /**
      * Default constructor for Lombok.
      */
     public SignInResponse() {
         // empty constructor for lombok
     }
-    /**
-     * A welcoming message or any additional information to be displayed after sign-in.
-     */
-    private String welcomingMessage;
 }

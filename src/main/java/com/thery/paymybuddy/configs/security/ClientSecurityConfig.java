@@ -13,7 +13,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
-import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Optional;
@@ -46,10 +49,10 @@ public class ClientSecurityConfig {
      */
     @Bean(name = "clientUserDetailsService")
     public UserDetailsService clientUserDetailsService() {
-            //implement loadUserByUsername (interface function) by lambda
-            UserDetailsService userDetailsService = clientId -> {
-                Long clientIdLong = Long.valueOf(clientId);
-                Optional<Client> client = clientRepository.findById(clientIdLong);
+        //implement loadUserByUsername (interface function) by lambda
+        UserDetailsService userDetailsService = clientId -> {
+            Long clientIdLong = Long.valueOf(clientId);
+            Optional<Client> client = clientRepository.findById(clientIdLong);
             if (client.isEmpty()) {
                 throw new UsernameNotFoundException("User not found with id: " + clientId);
             }
@@ -59,7 +62,7 @@ public class ClientSecurityConfig {
                     .roles(client.get().getRole())
                     .build();
         };
-            return userDetailsService;
+        return userDetailsService;
     }
 
     /**

@@ -11,14 +11,14 @@ import lombok.Getter;
 public class AddRelationShipsResponse {
 
     /**
-     * Empty constructor required by Lombok.
-     */
-    public AddRelationShipsResponse(){
-        // empty constructor for lombok
-    }
-
-    /**
      * A success message indicating the result of add relationships operation.
      */
     private String messageSuccess;
+
+    /**
+     * Empty constructor required by Lombok.
+     */
+    public AddRelationShipsResponse() {
+        // empty constructor for lombok
+    }
 }

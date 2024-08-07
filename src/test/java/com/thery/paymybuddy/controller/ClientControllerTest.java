@@ -1,10 +1,10 @@
 package com.thery.paymybuddy.controller;
 
-import com.thery.paymybuddy.service.ClientService;
 import com.thery.paymybuddy.dto.ProfileClientChangeRequest;
 import com.thery.paymybuddy.dto.ProfileClientChangeResponse;
 import com.thery.paymybuddy.dto.ProfileClientResponse;
 import com.thery.paymybuddy.dto.SavingClientResponse;
+import com.thery.paymybuddy.service.ClientService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -43,7 +43,7 @@ class ClientControllerTest {
 
     @Test
     void changeProfile_success() throws Exception {
-        ProfileClientChangeRequest profileClientChangeRequest = new ProfileClientChangeRequest("Alice", "alice@gmail.com","alicep");
+        ProfileClientChangeRequest profileClientChangeRequest = new ProfileClientChangeRequest("Alice", "alice@gmail.com", "alicep");
         ProfileClientChangeResponse profileClientChangeResponse = new ProfileClientChangeResponse(CHANGE_PROFILE_SUCCESS);
 
         when(clientService.changeProfile(any(ProfileClientChangeRequest.class))).thenReturn(profileClientChangeResponse);

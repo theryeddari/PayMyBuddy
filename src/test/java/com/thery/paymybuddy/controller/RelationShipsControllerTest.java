@@ -1,9 +1,9 @@
 package com.thery.paymybuddy.controller;
 
-import com.thery.paymybuddy.service.RelationShipsService;
 import com.thery.paymybuddy.dto.AddRelationShipsRequest;
 import com.thery.paymybuddy.dto.AddRelationShipsResponse;
 import com.thery.paymybuddy.dto.RelationShipsDetailForTransferResponse;
+import com.thery.paymybuddy.service.RelationShipsService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -40,7 +40,7 @@ public class RelationShipsControllerTest {
 
     @Test
     void relationShipsDetailForTransfer_success() throws Exception {
-        RelationShipsDetailForTransferResponse detailForTransferDTO = new RelationShipsDetailForTransferResponse(List.of("FriendA","FriendB") );
+        RelationShipsDetailForTransferResponse detailForTransferDTO = new RelationShipsDetailForTransferResponse(List.of("FriendA", "FriendB"));
 
         when(relationShipsService.relationShipsDetailForTransfer()).thenReturn(detailForTransferDTO);
 

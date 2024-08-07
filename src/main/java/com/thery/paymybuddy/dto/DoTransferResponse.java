@@ -11,14 +11,14 @@ import lombok.Getter;
 public class DoTransferResponse {
 
     /**
+     * Success message indicating the transfer was successful.
+     */
+    private String messageSuccess;
+
+    /**
      * Default constructor required by Lombok for instantiation.
      */
     public DoTransferResponse() {
         // empty constructor for lombok
     }
-
-    /**
-     * Success message indicating the transfer was successful.
-     */
-    private String messageSuccess;
 }

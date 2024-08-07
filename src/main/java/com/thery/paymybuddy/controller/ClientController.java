@@ -1,10 +1,10 @@
 package com.thery.paymybuddy.controller;
 
-import com.thery.paymybuddy.service.ClientService;
-import com.thery.paymybuddy.dto.ProfileClientChangeResponse;
 import com.thery.paymybuddy.dto.ProfileClientChangeRequest;
+import com.thery.paymybuddy.dto.ProfileClientChangeResponse;
 import com.thery.paymybuddy.dto.ProfileClientResponse;
 import com.thery.paymybuddy.dto.SavingClientResponse;
+import com.thery.paymybuddy.service.ClientService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -9,6 +9,10 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class AggregationNecessaryInfoForTransferResponse {
+    TransferredGeneralDetailResponse transferredGeneralDetailResponse;
+    RelationShipsDetailForTransferResponse relationShipsDetailForTransferResponse;
+    SavingClientResponse savingClientResponse;
+
     /**
      * Default constructor.
      * This constructor is required by Lombok.
@@ -16,8 +20,5 @@ public class AggregationNecessaryInfoForTransferResponse {
     public AggregationNecessaryInfoForTransferResponse() {
         // empty constructor for lombok
     }
-    TransferredGeneralDetailResponse transferredGeneralDetailResponse;
-    RelationShipsDetailForTransferResponse relationShipsDetailForTransferResponse;
-    SavingClientResponse savingClientResponse;
 
 }

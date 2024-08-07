@@ -7,13 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class SignInResponseDTO {
     /**
-     * Default constructor for Lombok.
-     */
-    public SignInResponseDTO() {
-        // empty constructor for lombok
-    }
-
-    /**
      * JWT token issued upon successful sign-in.
      */
     private String jwtToken;
@@ -21,5 +14,12 @@ public class SignInResponseDTO {
      * Dto upon successful sign-in.
      */
     private SignInResponse signInResponse;
+
+    /**
+     * Default constructor for Lombok.
+     */
+    public SignInResponseDTO() {
+        // empty constructor for lombok
+    }
 
 }

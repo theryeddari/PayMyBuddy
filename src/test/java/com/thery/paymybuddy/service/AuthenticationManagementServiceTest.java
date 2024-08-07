@@ -17,10 +17,10 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static com.thery.paymybuddy.exception.AuthenticationManagementServiceException.*;
-import static com.thery.paymybuddy.exception.ClientServiceException.*;
 import static com.thery.paymybuddy.constant.MessagesServicesConstants.LOG_OUT_SUCCESS;
 import static com.thery.paymybuddy.constant.MessagesServicesConstants.SIGN_IN_SUCCESS;
+import static com.thery.paymybuddy.exception.AuthenticationManagementServiceException.*;
+import static com.thery.paymybuddy.exception.ClientServiceException.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -81,7 +81,7 @@ public class AuthenticationManagementServiceTest {
         when(clientService.isExistClient(newClient.getEmail())).thenReturn(true);
 
         Exception exception = assertThrows(SignUpClientException.class, () -> authenticationManagementService.signUpClient(newClient));
-        assertEquals(ClientAlreadyExistException.class,exception.getCause().getClass());
+        assertEquals(ClientAlreadyExistException.class, exception.getCause().getClass());
     }
 
     @Test
@@ -89,7 +89,7 @@ public class AuthenticationManagementServiceTest {
 
         //input element for method and output
         SignInRequest signInRequest = new SignInRequest("alice@exemple.com", "alicep");
-        SignInResponseDTO exceptedSignInResponseDto = new SignInResponseDTO("jwtToken",new SignInResponse(SIGN_IN_SUCCESS));
+        SignInResponseDTO exceptedSignInResponseDto = new SignInResponseDTO("jwtToken", new SignInResponse(SIGN_IN_SUCCESS));
 
         Client client = mock(Client.class);
         when(client.getId()).thenReturn(1L);
@@ -112,7 +112,7 @@ public class AuthenticationManagementServiceTest {
         assertNotNull(response);
         assertEquals(exceptedSignInResponseDto.getJwtToken(), response.getJwtToken());
         assertEquals(exceptedSignInResponseDto.getSignInResponse().getWelcomingMessage(), response.getSignInResponse().getWelcomingMessage());
-        }
+    }
 
     @Test
     public void testSignInClient_Exception() throws FindByEmailException {

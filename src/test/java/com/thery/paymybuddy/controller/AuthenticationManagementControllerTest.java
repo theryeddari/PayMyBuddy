@@ -1,10 +1,8 @@
 package com.thery.paymybuddy.controller;
 
-import com.thery.paymybuddy.service.AuthenticationManagementService;
 import com.thery.paymybuddy.dto.*;
-
+import com.thery.paymybuddy.service.AuthenticationManagementService;
 import org.junit.jupiter.api.Test;
-
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -14,26 +12,25 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.Objects;
 
-import static com.thery.paymybuddy.constant.MessagesServicesConstants.*;
+import static com.thery.paymybuddy.constant.MessagesServicesConstants.SIGN_UP_SUCCESS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public  class AuthenticationManagementControllerTest {
+public class AuthenticationManagementControllerTest {
 
-        @InjectMocks
-        AuthenticationManagementController authenticationManagementController;
+    @InjectMocks
+    AuthenticationManagementController authenticationManagementController;
 
-        @Mock
-        private AuthenticationManagementService authenticationManagementService;
-
+    @Mock
+    private AuthenticationManagementService authenticationManagementService;
 
 
     @Test
     void signUpClient_success() throws Exception {
-        SignUpRequest signUpRequest = new SignUpRequest("Alice","alice@gmail.com","alicep");
+        SignUpRequest signUpRequest = new SignUpRequest("Alice", "alice@gmail.com", "alicep");
         SignUpResponse signUpResponse = new SignUpResponse(SIGN_UP_SUCCESS);
 
         when(authenticationManagementService.signUpClient(any(SignUpRequest.class))).thenReturn(signUpResponse);
@@ -46,7 +43,7 @@ public  class AuthenticationManagementControllerTest {
 
     @Test
     void signInClient_success() throws Exception {
-        SignInRequest signInRequest = new SignInRequest("alice@gmail.com","alicep");
+        SignInRequest signInRequest = new SignInRequest("alice@gmail.com", "alicep");
         SignInResponse signInResponse = new SignInResponse("Welcome new Buddy");
         SignInResponseDTO signInResponseDTO = new SignInResponseDTO("jwt-token", signInResponse);
 

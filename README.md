@@ -3,6 +3,10 @@ financial application
 
 read it with Code view and not Preview
 
+there 'is front end into frontEndNext field.
+
+this is it MDP about application :
+
 
 Transaction                                  Client                                             ClientRelationships   
 ___________________________                 _____________________________                       __________________________
